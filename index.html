@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LunaLunita | Servicios Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.paypal.com/sdk/js?client-id=AWJ6ZogbS9LFLcqoanrJZ2IFLPAU8y6pYS5mZ_AseX-f3N_pSArToddcIQll01fbR1MfycLA_X0sNM-n&currency=USD"></script>
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #ff4d94;
+            --accent: #00c2cb;
+            --dark: #1e0a3c;
+            --light: #f8f9fa;
+            --success: #2ecc71;
+            --tiktok: #000000;
+            --facebook: #1877f2;
+            --telegram: #2aabee;
+            --kick: #53fc18;
+            --instagram: #e4405f;
+            --youtube: #ff0000;
+            --whatsapp: #25d366;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(-45deg, #1e0a3c, #8a2be2, #ff4d94, #00c2cb);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(30, 10, 60, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            margin: 20px 0;
+            transform: scale(0.95);
+            animation: containerAppear 0.8s ease-out forwards;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        @keyframes containerAppear {
+            to { transform: scale(1); }
+        }
+        
+        header {
+            background: rgba(30, 10, 60, 0.9);
+            text-align: center;
+            padding: 12px 20px 8px 20px !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+        
+        header h1 {
+            font-size: 2.3rem !important;
+            margin-bottom: 0px !important;
+            background: linear-gradient(90deg, #ff4d94, #8a2be2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            line-height: 1 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px !important;
+        }
+
+        #animated-title {
+            display: inline !important;
+            line-height: 1 !important;
+        }
+
+        #animated-subtitle {
+            margin: 3px auto 0 !important;
+            line-height: 1.1 !important;
+            font-size: 1rem !important;
+            min-height: auto !important;
+            padding: 0 !important;
+            opacity: 0.9;
+            max-width: 600px;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            font-weight: 400;
+        }
+        
+        .services {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 30px;
+            gap: 25px;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(138, 43, 226, 0.2), rgba(255, 77, 148, 0.2));
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .service-card:hover::before {
+            opacity: 1;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .service-card.selected {
+            border-color: var(--primary);
+            background: rgba(138, 43, 226, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .service-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .telegram-icon {
+            color: #2aabee;
+        }
+        
+        .video-icon {
+            color: var(--secondary);
+        }
+        
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: white;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .service-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: white;
+            font-size: 1.8rem;
+            margin: 15px 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .price::before {
+            content: 'Precio: ';
+            font-size: 0.9rem;
+            opacity: 0.7;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .social-section {
+            padding: 20px;
+            background: rgba(30, 10, 60, 0.7);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-title {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .social-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .social-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            border: 1px solid transparent;
+            width: 110px;
+        }
+        
+        .social-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .social-icon {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        
+        .social-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .tiktok { color: var(--tiktok); }
+        .facebook { color: var(--facebook); }
+        .telegram { color: var(--telegram); }
+        .kick { color: var(--kick); }
+        .instagram { color: var(--instagram); }
+        .youtube { color: var(--youtube); }
+        .whatsapp { color: var(--whatsapp); }
+        
+        .payment-section {
+            padding: 30px;
+            background: rgba(30, 10, 60, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-title {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .pay-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            width: 100%;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pay-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .pay-btn:hover::before {
+            left: 100%;
+        }
+        
+        .pay-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pay-btn:active {
+            transform: translateY(0);
+        }
+        
+        .payment-logos {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .payment-logo {
+            font-size: 40px;
+            color: white;
+            opacity: 0.8;
+            transition: all 0.3s;
+        }
+        
+        .payment-logo:hover {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+        
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+            line-height: 1 !important;
+            display: inline-block !important;
+            margin: 0 5px !important;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(138, 43, 226, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .service-card {
+                max-width: 100%;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .social-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .social-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .social-title {
+                font-size: 1.1rem;
+            }
+            
+            .form-title {
+                font-size: 1.4rem;
+            }
+            
+            .service-icon {
+                font-size: 40px;
+            }
+            
+            .service-card h3 {
+                font-size: 1.2rem;
+            }
+            
+            .social-item {
+                width: 100px;
+                padding: 8px 12px;
+            }
+            
+            .social-icon {
+                font-size: 18px;
+            }
+            
+            .social-name {
+                font-size: 0.75rem;
+            }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .social-preview {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 10, 60, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--primary);
+        }
+        
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .preview-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .preview-content {
+            text-align: center;
+        }
+        
+        .preview-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+        
+        .preview-text {
+            margin-bottom: 20px;
+        }
+        
+        .preview-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .preview-button:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+        
+        .screenshot-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 10, 60, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--secondary);
+            text-align: center;
+            animation: modalAppear 0.5s ease-out forwards;
+        }
+        
+        @keyframes modalAppear {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .screenshot-modal h3 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .screenshot-modal p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        
+        .capture-text {
+            animation: bounce 2s infinite;
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-15px);}
+            60% {transform: translateY(-10px);}
+        }
+        
+        .payment-details {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .payment-details div {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .payment-details .label {
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .unique-code {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            letter-spacing: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .screenshot-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px 5px;
+        }
+        
+        .screenshot-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .telegram-btn {
+            background: linear-gradient(90deg, var(--telegram), #2a92c5);
+        }
+        
+        .hearts {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4d94'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-size: contain;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes floatHearts {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Estilos para PayPal */
+        #paypal-button-container {
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .payment-processing {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .payment-processing i {
+            font-size: 50px;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        /* Animaciones para confeti y corazones */
+        @keyframes confettiFall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes heartsFloat {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
+        }
+        
+        /* Corazones especiales para la sección de pago */
+        .payment-heart {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4d94'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-size: contain;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        @keyframes paymentHearts {
+            0% { transform: translateY(100%) rotate(0deg); opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100%) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="social-preview" id="socialPreview">
+        <div class="preview-header">
+            <h3 id="previewTitle">Red Social</h3>
+            <button class="preview-close" onclick="closePreview()">&times;</button>
+        </div>
+        <div class="preview-content">
+            <div class="preview-icon" id="previewIcon"></div>
+            <p class="preview-text" id="previewText">Conecta con nosotros en esta red social</p>
+            <a href="#" class="preview-button" id="previewLink" target="_blank">Visitar ahora</a>
+        </div>
+    </div>
+    
+    <div class="screenshot-modal" id="screenshotModal">
+        <h3>¡Pago Exitoso! 💖</h3>
+        <p class="capture-text">¡Mi amor, por favor tómame una captura de pantalla! 📸</p>
+        <p>Haz clic en "Chatear con Lunita" para enviarme la captura manualmente por Telegram. ¡Gracias por tu confianza! 💖</p>
+        
+        <div class="payment-details">
+            <div>
+                <span class="label">Nombre:</span>
+                <span id="detail-name">-</span>
+            </div>
+            <div>
+                <span class="label">Email:</span>
+                <span id="detail-email">-</span>
+            </div>
+            <div>
+                <span class="label">Servicio:</span>
+                <span id="detail-service">-</span>
+            </div>
+            <div>
+                <span class="label">Monto:</span>
+                <span id="detail-amount">-</span>
+            </div>
+            <div>
+                <span class="label">Fecha:</span>
+                <span id="detail-date">-</span>
+            </div>
+            <div>
+                <span class="label">Hora:</span>
+                <span id="detail-time">-</span>
+            </div>
+        </div>
+        
+        <div class="unique-code" id="uniqueCode">
+            Código: CARGANDO...
+        </div>
+        
+        <div>
+            <button class="screenshot-btn telegram-btn" onclick="openLunaChat()" id="chatBtn">
+                <i class="fab fa-telegram"></i> Chatear con Lunita
+            </button>
+            <button class="screenshot-btn" onclick="closeScreenshotModal()">
+                Cerrar
+            </button>
+        </div>
+        
+        <div id="statusMessage" style="margin-top: 15px; font-size: 0.9rem;"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>
+                <span class="floating">✨</span>
+                <span id="animated-title"></span>
+                <span class="floating">✨</span>
+            </h1>
+            <p id="animated-subtitle"></p>
+        </header>
+        
+        <div class="services">
+            <div class="service-card pulse" onclick="selectService(this)" data-price="25" data-service="CANAL VIP DE TELEGRAM">
+                <div class="service-icon">
+                    <i class="fab fa-telegram telegram-icon floating"></i>
+                </div>
+                <h3>Canal VIP de Telegram</h3>
+                <p>✨ TE ESPERA: Contenido íntimo y real 🍑, Mi numero personal📍, y muchas cositas ricas🔥</p>
+                <div class="price">$25.00</div>
+            </div>
+            
+            <div class="service-card" onclick="selectService(this)" data-price="30" data-service="Videollamada Premium">
+                <div class="service-icon">
+                    <i class="fas fa-video video-icon floating"></i>
+                </div>
+                <h3>Videollamada Hot</h3>
+                <p>¡25 minutos ardientes contigo! 🔥💋✨ Te doy: Yo desnuda y tocándome 🍑👅 Tú disfrutando como nunca 💦 Jugamos juntos en vivo 😏</p>
+                <div class="price">$30.00</div>
+            </div>
+        </div>
+        
+        <div class="social-section">
+            <h2 class="social-title">Síguenos en nuestras redes</h2>
+            <div class="social-grid">
+                <a class="social-item" onclick="showPreview('tiktok')">
+                    <div class="social-icon tiktok"><i class="fab fa-tiktok"></i></div>
+                    <div class="social-name">TikTok</div>
+                </a>
+                <a class="social-item" onclick="showPreview('facebook')">
+                    <div class="social-icon facebook"><i class="fab fa-facebook"></i></div>
+                    <div class="social-name">Facebook</div>
+                </a>
+                <a class="social-item" onclick="showPreview('telegram')">
+                    <div class="social-icon telegram"><i class="fab fa-telegram"></i></div>
+                    <div class="social-name">Telegram</div>
+                </a>
+                <a class="social-item" onclick="showPreview('kick')">
+                    <div class="social-icon kick"><i class="fas fa-play-circle"></i></div>
+                    <div class="social-name">Kick</div>
+                </a>
+                <a class="social-item" onclick="showPreview('instagram')">
+                    <div class="social-icon instagram"><i class="fab fa-instagram"></i></div>
+                    <div class="social-name">Instagram</div>
+                </a>
+                <a class="social-item" onclick="showPreview('youtube')">
+                    <div class="social-icon youtube"><i class="fab fa-youtube"></i></div>
+                    <div class="social-name">YouTube</div>
+                </a>
+                <a class="social-item" onclick="showPreview('whatsapp')">
+                    <div class="social-icon whatsapp"><i class="fab fa-whatsapp"></i></div>
+                    <div class="social-name">WhatsApp</div>
+                </a>
+                <a class="social-item" onclick="showPreview('jhamiley')">
+                    <div class="social-icon" style="color: #ff4d94;"><i class="fas fa-heart"></i></div>
+                    <div class="social-name">Jhamiley</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="payment-section" id="payment-section">
+            <h2 class="form-title">Complete su información de pago</h2>
+            
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                <input type="email" id="email" placeholder="tu@email.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="card-number"><i class="fas fa-credit-card"></i> Número de Tarjeta</label>
+                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="expiry"><i class="fas fa-calendar-alt"></i> Fecha de Expiración</label>
+                    <input type="text" id="expiry" placeholder="MM/AA" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cvv"><i class="fas fa-lock"></i> CVV</label>
+                    <input type="text" id="cvv" placeholder="123" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="name"><i class="fas fa-user"></i> Nombre en la Tarjeta</label>
+                <input type="text" id="name" placeholder="Juan Pérez" required>
+            </div>
+            
+            <button class="pay-btn" onclick="processPayment()">
+                <i class="fas fa-lock"></i> Pagar $<span id="amount">0.00</span>
+            </button>
+            
+            <div id="paypal-button-container"></div>
+            
+            <div class="payment-logos">
+                <div class="payment-logo"><i class="fab fa-cc-visa"></i></div>
+                <div class="payment-logo"><i class="fab fa-cc-mastercard"></i></div>
+                <div class="payment-logo"><i class="fab fa-cc-amex"></i></div>
+                <div class="payment-logo"><i class="fab fa-cc-discover"></i></div>
+                <div class="payment-logo"><i class="fab fa-paypal"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 LunaLunita. Todos los derechos reservados. | <a href="#" onclick="showTerms()">Términos</a> | <a href="#" onclick="showPrivacy()">Privacidad</a> | Soporte: <a href="https://t.me/lunalunita4200" target="_blank">@lunalunita4200</a></p>
+    </footer>
+
+    <script>
+        let selectedService = null;
+        let uniqueCode = '';
+        let paymentDetails = {};
+        
+        // Datos de redes sociales
+        const socialNetworks = {
+            tiktok: {
+                title: "TikTok",
+                icon: "fab fa-tiktok",
+                color: "#000000",
+                text: "Síguenos en TikTok para contenido exclusivo y divertido.",
+                link: "https://tiktok.com/@tuusuario"
+            },
+            facebook: {
+                title: "Facebook",
+                icon: "fab fa-facebook",
+                color: "#1877f2",
+                text: "Conéctate con nosotros en Facebook para las últimas actualizaciones.",
+                link: "https://facebook.com/tuperfil"
+            },
+            telegram: {
+                title: "Telegram",
+                icon: "fab fa-telegram",
+                color: "#2aabee",
+                text: "Únete a nuestro canal de Telegram para contenido VIP exclusivo.",
+                link: "https://t.me/lunalunita420"
+            },
+            kick: {
+                title: "Kick",
+                icon: "fas fa-play-circle",
+                color: "#53fc18",
+                text: "Mira nuestras transmisiones en vivo en Kick.",
+                link: "https://kick.com/tucuenta"
+            },
+            instagram: {
+                title: "Instagram",
+                icon: "fab fa-instagram",
+                color: "#e4405f",
+                text: "Síguenos en Instagram para fotos и stories exclusivas.",
+                link: "https://www.instagram.com/lunavidal_2?igsh=MXM4MXdoaGd4cnY1cA=="
+            },
+            youtube: {
+                title: "YouTube",
+                icon: "fab fa-youtube",
+                color: "#ff0000",
+                text: "Suscríbete a nuestro canal de YouTube para videos exclusivos.",
+                link: "https://www.youtube.com/@jhamiley_12/featured?sub_confirmation=1"
+            },
+            whatsapp: {
+                title: "WhatsApp",
+                icon: "fab fa-whatsapp",
+                color: "#25d366",
+                text: "Contáctanos directamente por WhatsApp para información personalizada.",
+                link: "https://whatsapp.com/channel/0029VanF8AGJENxzYLG39i1h"
+            },
+            jhamiley: {
+                title: "Jhamiley",
+                icon: "fas fa-heart",
+                color: "#ff4d94",
+                text: "Sigue a Jhamiley en todas sus redes sociales para contenido exclusivo.",
+                link: "https://linktr.ee/Jhamiley_12"
+            }
+        };
+        
+        function generateUniqueCode() {
+            const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+            const numbers = '23456789';
+            let code = '';
+            
+            for (let i = 0; i < 4; i++) {
+                if (Math.random() > 0.5) {
+                    code += letters.charAt(Math.floor(Math.random() * letters.length));
+                } else {
+                    code += numbers.charAt(Math.floor(Math.random() * numbers.length));
+                }
+            }
+            
+            return code;
+        }
+        
+        function sendTelegramNotification(code, details) {
+            const BOT_TOKEN = '8243515540:AAFszNtWQ4exfjRQZpsqXWiPtU_kRwV_nps';
+            const CANAL_NOTIFICACIONES_ID = -1003003351764;
+            
+            const mensaje = `🛒 **NUEVO PAGO REGISTRADO** 🛒
+
+📋 **Detalles de la transacción:**
+├─ Código: **${code}**
+├─ Nombre: ${details.name}
+├─ Email: ${details.email}
+├─ Servicio: ${details.service}
+├─ Monto: $${details.amount}.00
+├─ Fecha: ${details.date}
+└─ Hora: ${details.time}
+
+🔒 **Para validar:** El usuario debe enviar captura con este código
+✅ **Estado:** Pendiente de verificación`;
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CANAL_NOTIFICACIONES_ID}&text=${encodeURIComponent(mensaje)}&parse_mode=Markdown`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    console.log('✅ Notificación enviada al canal de notificaciones');
+                } else {
+                    console.error('❌ Error enviando al canal:', data);
+                }
+            })
+            .catch(error => console.error('Error de conexión:', error));
+        }
+        
+        function openLunaChat() {
+            window.open('https://t.me/lunalunita4200', '_blank');
+            
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.innerHTML = '✅ Chat abierto. Por favor envía la captura manualmente.';
+            statusMessage.style.color = '#2ecc71';
+        }
+        
+        function showPreview(network) {
+            const data = socialNetworks[network];
+            document.getElementById('previewTitle').textContent = data.title;
+            document.getElementById('previewIcon').innerHTML = `<i class="${data.icon}" style="color: ${data.color};"></i>`;
+            document.getElementById('previewText').textContent = data.text;
+            document.getElementById('previewLink').href = data.link;
+            document.getElementById('previewLink').style.background = data.color;
+            
+            document.getElementById('socialPreview').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+        
+        function closePreview() {
+            document.getElementById('socialPreview').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+        
+        function showScreenshotModal(details) {
+            paymentDetails = details;
+            
+            document.getElementById('detail-name').textContent = details.name;
+            document.getElementById('detail-email').textContent = details.email;
+            document.getElementById('detail-service').textContent = details.service;
+            document.getElementById('detail-amount').textContent = `$${details.amount}.00`;
+            document.getElementById('detail-date').textContent = details.date;
+            document.getElementById('detail-time').textContent = details.time;
+            
+            uniqueCode = generateUniqueCode();
+            document.getElementById('uniqueCode').textContent = `Código: ${uniqueCode}`;
+            
+            document.getElementById('screenshotModal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            
+            document.getElementById('statusMessage').innerHTML = '';
+            document.getElementById('statusMessage').style.color = '';
+            
+            sendTelegramNotification(uniqueCode, details);
+            
+            createHearts();
+        }
+        
+        function closeScreenshotModal() {
+            document.getElementById('screenshotModal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+        
+        function selectService(card) {
+            const cards = document.querySelectorAll('.service-card');
+            cards.forEach(c => {
+                c.classList.remove('selected');
+                c.classList.remove('pulse');
+            });
+            
+            card.classList.add('selected');
+            selectedService = card;
+            
+            const price = card.getAttribute('data-price');
+            document.getElementById('amount').textContent = price + '.00';
+            
+            createConfetti();
+            
+            document.getElementById('payment-section').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            createPaymentHearts();
+        }
+        
+        function processPayment() {
+            const email = document.getElementById('email').value;
+            const cardNumber = document.getElementById('card-number').value;
+            const expiry = document.getElementById('expiry').value;
+            const cvv = document.getElementById('cvv').value;
+            const name = document.getElementById('name').value;
+            
+            if (!selectedService) {
+                showNotification('Por favor selecciona un servicio antes de pagar.', 'error');
+                return;
+            }
+            
+            if (!email || !cardNumber || !expiry || !cvv || !name) {
+                showNotification('Por favor completa todos los campos de pago.', 'error');
+                return;
+            }
+            
+            document.querySelectorAll('.form-group, .form-row, .pay-btn').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            const paypalContainer = document.createElement('div');
+            paypalContainer.id = 'paypal-button-container';
+            document.querySelector('.payment-section').appendChild(paypalContainer);
+            
+            renderPayPalButtons();
+        }
+        
+        function renderPayPalButtons() {
+            const price = selectedService.getAttribute('data-price');
+            const serviceName = selectedService.getAttribute('data-service');
+            
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: price,
+                                currency_code: 'USD'
+                            },
+                            description: serviceName
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        showNotification('¡Pago exitoso! Se ha procesado tu pago correctamente.', 'success');
+                        
+                        const now = new Date();
+                        const date = now.toLocaleDateString();
+                        const time = now.toLocaleTimeString();
+                        
+                        const paymentDetails = {
+                            name: document.getElementById('name').value,
+                            email: document.getElementById('email').value,
+                            service: serviceName,
+                            amount: price,
+                            date: date,
+                            time: time,
+                            transactionId: details.id
+                        };
+                        
+                        setTimeout(() => {
+                            showScreenshotModal(paymentDetails);
+                        }, 1000);
+                    });
+                },
+                onError: function(err) {
+                    showNotification('Error en el procesamiento del pago. Por favor intenta nuevamente.', 'error');
+                    
+                    document.querySelectorAll('.form-group, .form-row, .pay-btn').forEach(el => {
+                        el.style.display = '';
+                    });
+                    
+                    document.getElementById('paypal-button-container').remove();
+                }
+            }).render('#paypal-button-container');
+        }
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '15px 20px';
+            notification.style.borderRadius = '10px';
+            notification.style.color = 'white';
+            notification.style.fontWeight = '500';
+            notification.style.zIndex = '1000';
+            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+            notification.style.transform = 'translateX(100px)';
+            notification.style.opacity = '0';
+            notification.style.transition = 'all 0.5s';
+            
+            if (type === 'error') {
+                notification.style.background = 'linear-gradient(90deg, #ff4d94, #ff3366)';
+            } else if (type === 'success') {
+                notification.style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
+            } else {
+                notification.style.background = 'linear-gradient(90deg, #8a2be2, #6a11cb)';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+                notification.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100px)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+        
+        function createConfetti() {
+            const colors = ['#8a2be2', '#ff4d94', '#00c2cb', '#2ecc71', '#f1c40f'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+                
+                const animation = confetti.animate([
+                    { top: '-10px', opacity: 1, transform: 'rotate(0deg)' },
+                    { top: '100vh', opacity: 0, transform: 'rotate(720deg)' }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    document.body.removeChild(confetti);
+                };
+            }
+        }
+        
+        function createPaymentHearts() {
+            const paymentSection = document.getElementById('payment-section');
+            const colors = ['#ff4d94', '#8a2be2', '#00c2cb', '#ff3366', '#ff6b6b'];
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'payment-heart';
+                
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.bottom = '0';
+                
+                heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                paymentSection.appendChild(heart);
+                
+                const animation = heart.animate([
+                    { transform: 'translateY(100%) rotate(0deg)', opacity: 1 },
+                    { transform: 'translateY(-100%) rotate(360deg)', opacity: 0 }
+                ], {
+                    duration: Math.random() * 2000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    paymentSection.removeChild(heart);
+                };
+            }
+        }
+        
+        function createHearts() {
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'hearts';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '100vh';
+                document.body.appendChild(heart);
+                
+                const animation = heart.animate([
+                    { top: '100vh', opacity: 1, transform: 'rotate(0deg)' },
+                    { top: '0vh', opacity: 0, transform: 'rotate(360deg)' }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    document.body.removeChild(heart);
+                };
+            }
+        }
+        
+        function showTerms() {
+            alert("TÉRMINOS Y CONDICIONES\n\nServicios: Ofrecemos servicios premium digitales sujetos a disponibilidad.\nPagos: Los pagos se procesan a través de PayPal. No hay reembolsos una vez que se ha accedido al contenido.\nContacto: Para soporte, contáctanos a través de Telegram: @lunalunita4200");
+        }
+        
+        function showPrivacy() {
+            alert("POLÍTICA DE PRIVACIDAD\n\nEn LunaLunita, protegemos tu privacidad. Solo recopilamos información necesaria para procesar tus pagos y brindarte nuestros servicios.\n\nInformación que recopilamos: Nombre, email e información de pago necesaria para procesar transacciones a través de PayPal.\n\nUso de la información: Tu información se utiliza exclusivamente para procesar pagos y contactarte sobre nuestros servicios.\n\nProtección de datos: Utilizamos PayPal para procesamientos de pago seguros. No almacenamos información de tarjetas de crédito.");
+        }
+        
+        // Efecto de escritura para el título y subtítulo
+        document.addEventListener('DOMContentLoaded', function() {
+            const titleElement = document.getElementById('animated-title');
+            const subtitleElement = document.getElementById('animated-subtitle');
+            const titleText = "✨TU ACCESO A MI MUNDO PRIVADO✨ Contenido ardiente, donde tú eres el protagonista ✨";
+            const subtitleText = "🎯 ¿CUÁL ELIGES?… Todo está a un clic de distancia… ¿te atreves?😏💋";
+            
+            titleElement.innerHTML = '';
+            subtitleElement.innerHTML = '';
+            
+            let i = 0;
+            
+            const titleTypeWriter = setInterval(function() {
+                if (i < titleText.length) {
+                    titleElement.innerHTML += titleText.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(titleTypeWriter);
+                    setTimeout(startSubtitleAnimation, 300);
+                }
+            }, 25);
+            
+            function startSubtitleAnimation() {
+                let j = 0;
+                const subtitleTypeWriter = setInterval(function() {
+                    if (j < subtitleText.length) {
+                        subtitleElement.innerHTML += subtitleText.charAt(j);
+                        j++;
+                    } else {
+                        clearInterval(subtitleTypeWriter);
+                    }
+                }, 15);
+            }
+            
+            setInterval(() => {
+                createHearts();
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
