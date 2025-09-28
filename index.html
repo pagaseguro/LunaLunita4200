@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LunaLunita | PAGA SEGURO</title>
+    <title>LunaLunita | PAGO SEGURO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.paypal.com/sdk/js?client-id=AWJ6ZogbS9LFLcqoanrJZ2IFLPAU8y6pYS5mZ_AseX-f3N_pSArToddcIQll01fbR1MfycLA_X0sNM-n&currency=USD"></script>
     <style>
         :root {
             --primary: #8a2be2;
@@ -301,6 +302,89 @@
             -webkit-text-fill-color: transparent;
         }
         
+        .paypal-custom-container {
+            margin-top: 20px;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .paypal-header {
+            text-align: center;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .paypal-header i {
+            font-size: 28px;
+            color: #0070ba;
+        }
+        
+        .paypal-header span {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .paypal-powered {
+            text-align: center;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Personalización de los botones de PayPal */
+        .paypal-buttons {
+            border-radius: 10px !important;
+            overflow: hidden !important;
+        }
+        
+        /* Para el botón de tarjeta de crédito */
+        .paypal-button-card {
+            background: linear-gradient(90deg, var(--primary), var(--secondary)) !important;
+            color: white !important;
+            border-radius: 10px !important;
+            font-family: 'Poppins', sans-serif !important;
+            padding: 12px 20px !important;
+            font-weight: 500 !important;
+        }
+        
+        .paypal-button-card:hover {
+            background: linear-gradient(90deg, var(--secondary), var(--primary)) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        /* Para el botón de PayPal estándar */
+        .paypal-button {
+            border-radius: 10px !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+        
+        /* Ocultar el texto por defecto y añadir nuestro propio estilo */
+        .paypal-button-container :first-child {
+            visibility: hidden;
+            position: relative;
+        }
+        
+        .paypal-button-container :first-child::after {
+            content: "Pagar con Tarjeta";
+            visibility: visible;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+        }
+        
         .payment-logos {
             display: flex;
             justify-content: center;
@@ -360,6 +444,60 @@
             0% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(138, 43, 226, 0); }
             100% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .service-card {
+                max-width: 100%;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .social-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .social-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .social-title {
+                font-size: 1.1rem;
+            }
+            
+            .form-title {
+                font-size: 1.4rem;
+            }
+            
+            .service-icon {
+                font-size: 40px;
+            }
+            
+            .service-card h3 {
+                font-size: 1.2rem;
+            }
+            
+            .social-item {
+                width: 100px;
+                padding: 8px 12px;
+            }
+            
+            .social-icon {
+                font-size: 18px;
+            }
+            
+            .social-name {
+                font-size: 0.75rem;
+            }
         }
         
         .confetti {
@@ -426,29 +564,11 @@
             border-radius: 8px;
             font-weight: 500;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .preview-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: 0.5s;
-        }
-        
-        .preview-button:hover::before {
-            left: 100%;
         }
         
         .preview-button:hover {
             background: var(--secondary);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .overlay {
@@ -557,23 +677,6 @@
             cursor: pointer;
             font-size: 1rem;
             margin: 10px 5px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .screenshot-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: 0.5s;
-        }
-        
-        .screenshot-btn:hover::before {
-            left: 100%;
         }
         
         .screenshot-btn:hover {
@@ -645,7 +748,7 @@
             position: absolute;
             width: 24px;
             height: 24px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4d94'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 极速8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 极速16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4d94'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
             background-size: contain;
             opacity: 0;
             pointer-events: none;
@@ -657,332 +760,186 @@
             50% { opacity: 0.8; }
             100% { transform: translateY(-100%) rotate(360deg); opacity: 0; }
         }
-
-        /* Estilos para el formulario de tarjeta de crédito */
-        .card-form-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .card-form-header {
-            text-align: center;
-            margin-bottom: 20px;
+        
+        /* Notificaciones personalizadas */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 10, 60, 0.95);
+            border-left: 5px solid var(--primary);
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1002;
+            max-width: 350px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
         }
-
-        .card-form-header i {
-            font-size: 28px;
-            color: #0070ba;
+        
+        .notification.show {
+            transform: translateX(0);
         }
-
-        .card-form-header h3 {
-            font-size: 1.4rem;
-            color: white;
-            font-weight: 600;
-        }
-
-        .card-options {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .card-option {
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-        }
-
-        .card-option.selected {
-            border-color: var(--primary);
-            background: rgba(138, 43, 226, 0.2);
-        }
-
-        .card-option i {
+        
+        .notification-icon {
             font-size: 24px;
-            margin-bottom: 10px;
-            color: white;
+            margin-right: 15px;
+            flex-shrink: 0;
         }
-
-        .card-option span {
-            color: white;
-            font-weight: 500;
-        }
-
-        .form-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.2);
-            margin: 20px 0;
-        }
-
-        .form-section-title {
-            font-size: 1.1rem;
-            color: white;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .required-label {
-            color: #ff4d94;
-            font-size: 0.9rem;
-            margin-left: 5px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
+        
+        .notification-content {
             flex: 1;
         }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.3);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .checkbox-group input {
-            width: 18px;
-            height: 18px;
-        }
-
-        .checkbox-group label {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-
-        .pay-button {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 12px;
-            width: 100%;
-            font-size: 1.2rem;
+        
+        .notification-title {
             font-weight: 600;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .notification-message {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 18px;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
+            margin-left: 10px;
+            flex-shrink: 0;
         }
-
-        .pay-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: 0.5s;
+        
+        .notification-close:hover {
+            color: white;
         }
-
-        .pay-button:hover::before {
-            left: 100%;
+        
+        .notification.success {
+            border-left-color: var(--success);
         }
-
-        .pay-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        
+        .notification.error {
+            border-left-color: var(--secondary);
         }
-
-        .pay-button:active {
-            transform: translateY(0);
+        
+        .notification.warning {
+            border-left-color: #f39c12;
         }
-
-        .powered-by {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
+        
+        .notification.info {
+            border-left-color: var(--accent);
         }
-
-        /* Estilos para las ventanas de Términos y Privacidad */
-        .policy-modal {
+        
+        /* Modal para términos y privacidad */
+        .modal {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(30, 10, 60, 0.98);
-            border-radius: 20px;
+            background: rgba(30, 10, 60, 0.95);
+            border-radius: 15px;
             padding: 30px;
-            z-index: 1002;
+            z-index: 1001;
             width: 90%;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
             border: 2px solid var(--primary);
             animation: modalAppear 0.5s ease-out forwards;
         }
-
-        .policy-modal::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .policy-modal::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        .policy-modal::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-
-        .policy-header {
+        
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid var(--primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .policy-header h2 {
-            font-size: 1.8rem;
-            background: linear-gradient(90deg, var(--secondary), var(--primary));
+        
+        .modal-title {
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 700;
+            margin: 0;
         }
-
-        .policy-close {
+        
+        .modal-close {
             background: none;
             border: none;
             color: white;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s;
         }
-
-        .policy-close:hover {
-            color: var(--secondary);
-            transform: scale(1.1);
+        
+        .modal-content {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
         }
-
-        .policy-content {
-            padding: 10px;
-        }
-
-        .policy-section {
-            margin-bottom: 25px;
-        }
-
-        .policy-section h3 {
-            font-size: 1.3rem;
-            color: var(--accent);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .policy-section h3 i {
-            font-size: 1.2rem;
-        }
-
-        .policy-section p {
-            color: rgba(255, 255, 255, 0.9);
+        
+        .modal-content p {
+            margin-bottom: 15px;
             line-height: 1.6;
-            margin-bottom: 15px;
-            text-align: justify;
         }
-
-        .policy-list {
-            padding-left: 20px;
-            margin: 15px 0;
+        
+        /* Indicador de scroll */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            animation: bounce 2s infinite;
+            display: none;
         }
-
-        .policy-list li {
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        .policy-highlight {
-            background: linear-gradient(90deg, rgba(138, 43, 226, 0.2), rgba(255, 77, 148, 0.2));
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid var(--secondary);
-            margin: 20px 0;
-        }
-
-        .policy-contact {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .policy-contact p {
-            margin-bottom: 15px;
-        }
-
-        .policy-contact a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .policy-contact a:hover {
-            color: var(--secondary);
-            text-decoration: underline;
+        
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                display: block;
+            }
         }
     </style>
 </head>
 <body>
     <div class="overlay" id="overlay"></div>
+    
+    <!-- Modal para términos y privacidad -->
+    <div class="modal" id="termsModal">
+        <div class="modal-header">
+            <h3 class="modal-title">Términos de Servicio</h3>
+            <button class="modal-close" onclick="closeModal('termsModal')">&times;</button>
+        </div>
+        <div class="modal-content">
+            <p>Al utilizar nuestros servicios, aceptas nuestras políticas de privacidad y términos de uso. Todo el contenido es para mayores de 18 años.</p>
+            <p><strong>Elegibilidad:</strong> Debes ser mayor de 18 años para utilizar nuestros servicios.</p>
+            <p><strong>Contenido:</strong> Todo el contenido proporcionado es para uso personal y no comercial.</p>
+            <p><strong>Pagos:</strong> Los pagos son procesados de forma segura a través de PayPal.</p>
+            <p><strong>Privacidad:</strong> Respetamos tu privacidad. Tus datos personales no serán compartidos con terceros sin tu consentimiento.</p>
+        </div>
+    </div>
+    
+    <div class="modal" id="privacyModal">
+        <div class="modal-header">
+            <h3 class="modal-title">Política de Privacidad</h3>
+            <button class="modal-close" onclick="closeModal('privacyModal')">&times;</button>
+        </div>
+        <div class="modal-content">
+            <p>Tu privacidad es importante para nosotros. Esta política explica qué información recopilamos y cómo la utilizamos.</p>
+            <p><strong>Información que recopilamos:</strong> Recopilamos información que nos proporcionas directamente, como tu nombre y dirección de correo electrónico cuando realizas un pago.</p>
+            <p><strong>Cómo utilizamos tu información:</strong> Utilizamos tu información para procesar tus pagos y proporcionar los servicios solicitados.</p>
+            <p><strong>Compartición de información:</strong> No vendemos, comerciamos ni transferimos tu información personal a terceros.</p>
+            <p><strong>Seguridad:</strong> Implementamos medidas de seguridad para proteger tu información personal.</p>
+        </div>
+    </div>
     
     <div class="social-preview" id="socialPreview">
         <div class="preview-header">
@@ -1036,147 +993,10 @@
             <button class="screenshot-btn telegram-btn" onclick="openLunaChat()" id="chatBtn">
                 <i class="fab fa-telegram"></i> Chatear con Lunita
             </button>
-            <button class="screenshot-btn" onclick="closeScreenshotModal()">
-                Cerrar
-            </button>
+            <button class="screenshot-btn" onclick="closeScreenshotModal()">Cerrar</button>
         </div>
         
         <div id="statusMessage" style="margin-top: 15px; font-size: 0.9rem;"></div>
-    </div>
-
-    <!-- Modal de Términos y Condiciones -->
-    <div class="policy-modal" id="termsModal">
-        <div class="policy-header">
-            <h2><i class="fas fa-file-contract"></i> Términos y Condiciones</h2>
-            <button class="policy-close" onclick="closePolicyModal('termsModal')">&times;</button>
-        </div>
-        <div class="policy-content">
-            <div class="policy-section">
-                <h3><i class="fas fa-gavel"></i> Condiciones del Servicio</h3>
-                <p>Al utilizar nuestros servicios, aceptas cumplir con los siguientes términos y condiciones. Estos términos rigen tu acceso y uso de los servicios premium de LunaLunita.</p>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-user-check"></i> Elegibilidad</h3>
-                <p>Debes tener al menos 18 años de edad para utilizar nuestros servicios. Al acceder y utilizar nuestros servicios, declaras y garantizas que tienes la edad legal requerida en tu jurisdicción.</p>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-lock"></i> Servicios Premium</h3>
-                <p>Ofrecemos servicios premium digitales sujetos a disponibilidad. Todo el contenido proporcionado es para uso personal y no comercial.</p>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-credit-card"></i> Pagos y Facturación</h3>
-                <p>Los pagos se procesan de forma segura a través de PayPal. Una vez que se ha accedido al contenido premium, no se realizan reembolsos.</p>
-                <ul class="policy-list">
-                    <li>Todos los precios se muestran en dólares estadounidenses (USD)</li>
-                    <li>El acceso a los servicios se otorga después de la confirmación del pago</li>
-                    <li>Nos reservamos el derecho de modificar los precios en cualquier momento</li>
-                </ul>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-ban"></i> Conducta Prohibida</h3>
-                <p>Queda estrictamente prohibido:</p>
-                <ul class="policy-list">
-                    <li>Compartir, redistribuir o revender el contenido premium</li>
-                    <li>Utilizar los servicios para actividades ilegales</li>
-                    <li>Suplantar la identidad de otra persona</li>
-                    <li>Realizar chargebacks o disputas fraudulentas</li>
-                </ul>
-            </div>
-            
-            <div class="policy-highlight">
-                <p><i class="fas fa-exclamation-circle"></i> <strong>Nota importante:</strong> Nos reservamos el derecho de suspender o terminar tu acceso a nuestros servicios si violas estos términos y condiciones.</p>
-            </div>
-            
-            <div class="policy-contact">
-                <p>Para consultas sobre nuestros términos y condiciones, contáctanos a través de:</p>
-                <p><a href="https://t.me/lunalunita4200" target="_blank"><i class="fab fa-telegram"></i> Telegram: @lunalunita4200</a></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Política de Privacidad -->
-    <div class="policy-modal" id="privacyModal">
-        <div class="policy-header">
-            <h2><i class="fas fa-shield-alt"></i> Política de Privacidad</h2>
-            <button class="policy-close" onclick="closePolicyModal('privacyModal')">&times;</button>
-        </div>
-        <div class="policy-content">
-            <div class="policy-section">
-                <h3><i class="fas fa-info-circle"></i> Introducción</h3>
-                <p>En LunaLunita, protegemos tu privacidad y nos comprometemos a mantener la confidencialidad de tu información personal. Esta política describe cómo recopilamos, utilizamos y protegemos tus datos.</p>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-database"></i> Información que Recopilamos</h3>
-                <p>Recopilamos solo la información necesaria para procesar tus pagos y brindarte nuestros servicios:</p>
-                <ul class="policy-list">
-                    <li><strong>Información de contacto:</strong> Nombre y dirección de correo electrónico</li>
-                    <li><strong>Información de pago:</strong> Datos necesarios para procesar transacciones a través de PayPal</li>
-                    <li><strong>Información de uso:</strong> Datos sobre cómo interactúas con nuestros servicios</li>
-                </ul>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-cog"></i> Uso de la Información</h3>
-                <p>Tu información se utiliza exclusivamente para los siguientes propósitos:</p>
-                <ul class="policy-list">
-                    <li>Procesar tus pagos y proporcionar los servicios solicitados</li>
-                    <li>Comunicarnos contigo sobre tus transacciones y servicios</li>
-                    <li>Mejorar la calidad de nuestros servicios y experiencia del usuario</li>
-                    <li>Cumplir con obligaciones legales y regulatorias</li>
-                </ul>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-lock"></i> Protección de Datos</h3>
-                <p>Implementamos medidas de seguridad técnicas y organizativas para proteger tu información:</p>
-                <ul class="policy-list">
-                    <li>Utilizamos PayPal para procesamientos de pago seguros</li>
-                    <li>No almacenamos información de tarjetas de crédito en nuestros servidores</li>
-                    <li>Limitamos el acceso a tu información solo al personal autorizado</li>
-                    <li>Utilizamos encriptación para proteger los datos en tránsito</li>
-                </ul>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-share-alt"></i> Divulgación a Terceros</h3>
-                <p>No vendemos, comerciamos ni transferimos tu información personal a terceros, excepto en los siguientes casos:</p>
-                <ul class="policy-list">
-                    <li>Proveedores de servicios de pago (PayPal) para procesar transacciones</li>
-                    <li>Cumplimiento de requisitos legales o regulatorios</li>
-                    <li>Protección de nuestros derechos, propiedad o seguridad</li>
-                </ul>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-cookie"></i> Cookies y Tecnologías Similares</h3>
-                <p>Utilizamos cookies para mejorar tu experiencia en nuestro sitio web. Las cookies nos ayudan a recordar tus preferencias y a entender cómo utilizas nuestros servicios.</p>
-            </div>
-            
-            <div class="policy-section">
-                <h3><i class="fas fa-user-edit"></i> Tus Derechos</h3>
-                <p>Tienes derecho a:</p>
-                <ul class="policy-list">
-                    <li>Acceder a la información personal que tenemos sobre ti</li>
-                    <li>Solicitar la corrección de información inexacta</li>
-                    <li>Solicitar la eliminación de tu información personal</li>
-                    <li>Oponerte al procesamiento de tu información</li>
-                </ul>
-            </div>
-            
-            <div class="policy-highlight">
-                <p><i class="fas fa-sync-alt"></i> <strong>Actualizaciones de la Política:</strong> Podemos actualizar esta política ocasionalmente. Te notificaremos sobre cambios significativos publicando la nueva política en este sitio.</p>
-            </div>
-            
-            <div class="policy-contact">
-                <p>Para ejercer tus derechos de privacidad o hacer preguntas sobre esta política, contáctanos a través de:</p>
-                <p><a href="https://t.me/lunalunita4200" target="_blank"><i class="fab fa-telegram"></i> Telegram: @lunalunita4200</a></p>
-            </div>
-        </div>
     </div>
     
     <div class="container">
@@ -1250,100 +1070,15 @@
         <div class="payment-section" id="payment-section">
             <h2 class="form-title">Complete su información de pago</h2>
             
-            <!-- Formulario de tarjeta de crédito -->
-            <div class="card-form-container">
-                <div class="card-form-header">
+            <!-- Contenedor personalizado para PayPal -->
+            <div class="paypal-custom-container">
+                <div class="paypal-header">
                     <i class="fab fa-cc-paypal"></i>
-                    <h3>PayPal</h3>
+                    <span>PayPal</span>
                 </div>
-                
-                <div class="card-options">
-                    <div class="card-option selected" onclick="selectCardOption(this)">
-                        <i class="fas fa-credit-card"></i>
-                        <span>Tarjeta de Débito o Crédito</span>
-                    </div>
-                </div>
-                
-                <div class="form-divider"></div>
-                
-                <div class="form-section-title">Número de tarjeta <span class="required-label">*</span></div>
-                <div class="form-group">
-                    <input type="text" placeholder="1234 5678 9012 3456" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Fecha de vencimiento <span class="required-label">*</span></label>
-                        <input type="text" placeholder="MM/AA" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Código de seguridad (CSC) <span class="required-label">*</span></label>
-                        <input type="text" placeholder="123" required>
-                    </div>
-                </div>
-                
-                <div class="form-divider"></div>
-                
-                <div class="form-section-title">Dirección de facturación</div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nombre <span class="required-label">*</span></label>
-                        <input type="text" placeholder="" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Apellido <span class="required-label">*</span></label>
-                        <input type="text" placeholder="" required>
-                    </div>
-                </div>
-                
-                <div class="form-section-title">Dirección</div>
-                <div class="form-group">
-                    <input type="text" placeholder="Calle, número, apartamento, etc.">
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Ciudad <span class="required-label">*</span></label>
-                        <input type="text" placeholder="" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Estado/Provincia <span class="required-label">*</span></label>
-                        <input type="text" placeholder="" required>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Código postal <span class="required-label">*</span></label>
-                        <input type="text" placeholder="" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Teléfono móvil</label>
-                        <input type="text" placeholder="">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Correo electrónico <span class="required-label">*</span></label>
-                    <input type="email" placeholder="tu@email.com" required>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="sameBilling">
-                    <label for="sameBilling">Usar la misma dirección de facturación</label>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="ageConfirm" required>
-                    <label for="ageConfirm">Al continuar, confirmas que tienes 18 años o más.</label>
-                </div>
-                
-                <button class="pay-button" onclick="processCardPayment()">
-                    <i class="fas fa-lock"></i> Pagar $<span id="amount">0.00</span>
-                </button>
-                
-                <div class="powered-by">
-                    Procesado de forma segura por PayPal
+                <div id="paypal-button-container"></div>
+                <div class="paypal-powered">
+                    *Procesado de forma segura por PayPal
                 </div>
             </div>
             
@@ -1358,7 +1093,7 @@
     </div>
     
     <footer>
-        <p>© 2025 LunaLunita. Todos los derechos reservados. | <a href="#" onclick="showTerms()">Términos</a> | <a href="#" onclick="showPrivacy()">Privacidad</a> | Soporte: <a href="https://t.me/lunalunita4200" target="_blank">@lunalunita4200</a></p>
+        <p>© 2025 LunaLunita. Todos los derechos reservados. | <a href="#" onclick="showModal('termsModal')">Términos</a> | <a href="#" onclick="showModal('privacyModal')">Privacidad</a> | Soporte: <a href="https://t.me/lunalunita4200" target="_blank">@lunalunita4200</a></p>
     </footer>
 
     <script>
@@ -1393,113 +1128,311 @@
                 title: "Kick",
                 icon: "fas fa-play-circle",
                 color: "#53fc18",
-                text: "Mira nuestras transmisiones en vivo en Kick.",
-                link: "https://kick.com/tucuenta"
+                text: "Míranos en vivo en nuestra plataforma de streaming favorita.",
+                link: "https://kick.com/tucanal"
             },
             instagram: {
                 title: "Instagram",
                 icon: "fab fa-instagram",
                 color: "#e4405f",
                 text: "Síguenos en Instagram para fotos y stories exclusivas.",
-                link: "https://www.instagram.com/lunavidal_2?igsh=MXM4MXdoaGd4cnY1cA=="
+                link: "https://instagram.com/tuperfil"
             },
             youtube: {
                 title: "YouTube",
                 icon: "fab fa-youtube",
                 color: "#ff0000",
                 text: "Suscríbete a nuestro canal de YouTube para videos exclusivos.",
-                link: "https://www.youtube.com/@jhamiley_12/featured?sub_confirmation=1"
+                link: "https://youtube.com/tucanal"
             },
             whatsapp: {
                 title: "WhatsApp",
                 icon: "fab fa-whatsapp",
                 color: "#25d366",
-                text: "Contáctanos directamente por WhatsApp para información personalizada.",
-                link: "https://whatsapp.com/channel/0029VanF8AGJENxzYLG39i1h"
+                text: "Contáctanos por WhatsApp para consultas personalizadas.",
+                link: "https://wa.me/tunumero"
             },
             jhamiley: {
                 title: "Jhamiley",
                 icon: "fas fa-heart",
                 color: "#ff4d94",
-                text: "Sigue a Jhamiley en todas sus redes sociales para contenido exclusivo.",
-                link: "https://linktr.ee/Jhamiley_12"
+                text: "Visita mi perfil especial para contenido personalizado.",
+                link: "https://jhamiley.com/tuperfil"
             }
         };
         
-        // Funciones para mostrar/ocultar los modales de políticas
-        function showTerms() {
-            document.getElementById('termsModal').style.display = 'block';
+        // Inicializar PayPal
+        paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color: 'blue',
+                shape: 'rect',
+                label: 'paypal',
+                tagline: false,
+                height: 45
+            },
+            createOrder: function(data, actions) {
+                if (!selectedService) {
+                    showNotification('error', '¿videollamada o vip?', 'Por favor selecciona un servicio primero.');
+                    return false;
+                }
+                
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: selectedService.getAttribute('data-price')
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Mostrar modal de éxito
+                    showScreenshotModal(details);
+                    
+                    // Crear corazones de celebración
+                    createHearts(30);
+                });
+            },
+            onError: function(err) {
+                console.error('ELIJA UN SERVICIO:', err);
+                showNotification('error', '¿VIDEOLLAMADA O VIP?', 'Tienes que escoger entre vip o videollamada');
+            }
+        }).render('#paypal-button-container');
+        
+        // Función para mostrar notificación personalizada
+        function showNotification(type, title, message) {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            // Icono según el tipo
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            if (type === 'warning') icon = 'fa-exclamation-triangle';
+            
+            // Contenido de la notificación
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close">&times;</button>
+            `;
+            
+            // Añadir al cuerpo
+            document.body.appendChild(notification);
+            
+            // Mostrar con animación
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Cerrar al hacer clic en el botón
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                closeNotification(notification);
+            });
+            
+            // Cerrar automáticamente después de 5 segundos
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    closeNotification(notification);
+                }
+            }, 5000);
+        }
+        
+        // Función para cerrar notificación
+        function closeNotification(notification) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 400);
+        }
+        
+        // Función para mostrar modal
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
         }
         
-        function showPrivacy() {
-            document.getElementById('privacyModal').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
-        
-        function closePolicyModal(modalId) {
+        // Función para cerrar modal
+        function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
         }
         
-        function generateUniqueCode() {
-            const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-            const numbers = '23456789';
-            let code = '';
+        // Función para mostrar el modal de captura de pantalla
+        function showScreenshotModal(details) {
+            // Guardar detalles del pago
+            paymentDetails = {
+                name: details.payer.name.given_name + ' ' + details.payer.name.surname,
+                email: details.payer.email_address,
+                service: selectedService.getAttribute('data-service'),
+                amount: '$' + selectedService.getAttribute('data-price'),
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString()
+            };
             
-            for (let i = 0; i < 4; i++) {
-                if (Math.random() > 0.5) {
-                    code += letters.charAt(Math.floor(Math.random() * letters.length));
-                } else {
-                    code += numbers.charAt(Math.floor(Math.random() * numbers.length));
-                }
-            }
+            // Actualizar detalles en el modal
+            document.getElementById('detail-name').textContent = paymentDetails.name;
+            document.getElementById('detail-email').textContent = paymentDetails.email;
+            document.getElementById('detail-service').textContent = paymentDetails.service;
+            document.getElementById('detail-amount').textContent = paymentDetails.amount;
+            document.getElementById('detail-date').textContent = paymentDetails.date;
+            document.getElementById('detail-time').textContent = paymentDetails.time;
             
-            return code;
+            // Generar código único
+            generateUniqueCode();
+            
+            // Mostrar modal
+            document.getElementById('screenshotModal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
         }
         
-        function sendTelegramNotification(code, details) {
-            const BOT_TOKEN = '8243515540:AAFszNtWQ4exfjRQZpsqXWiPtU_kRwV_nps';
-            const CANAL_NOTIFICACIONES_ID = -1003003351764;
-            
-            const mensaje = `🛒 **NUEVO PAGO REGISTRADO** 🛒
-
-📋 **Detalles de la transacción:**
-├─ Código: **${code}**
-├─ Nombre: ${details.name}
-├─ Email: ${details.email}
-├─ Servicio: ${details.service}
-├─ Monto: $${details.amount}.00
-├─ Fecha: ${details.date}
-└─ Hora: ${details.time}
-
-🔒 **Para validar:** El usuario debe enviar captura con este código
-✅ **Estado:** Pendiente de verificación`;
-
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CANAL_NOTIFICACIONES_ID}&text=${encodeURIComponent(mensaje)}&parse_mode=Markdown`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    console.log('✅ Notificación enviada al canal de notificaciones');
-                } else {
-                    console.error('❌ Error enviando al canal:', data);
-                }
-            })
-            .catch(error => console.error('Error de conexión:', error));
+        // Función para cerrar el modal de captura
+        function closeScreenshotModal() {
+            document.getElementById('screenshotModal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
         }
         
+        // Función para abrir chat con Luna
         function openLunaChat() {
-            window.open('https://t.me/lunalunita4200', '_blank');
+            const message = encodeURIComponent(`¡Hola Lunita! He realizado un pago. Mi código único es: ${uniqueCode}. Te envío la captura en un momento.`);
+            window.open(`https://t.me/lunalunita4200?text=${message}`, '_blank');
             
-            const statusMessage = document.getElementById('statusMessage');
-            statusMessage.innerHTML = '✅ Chat abierto. Por favor envía la captura manualmente.';
-            statusMessage.style.color = '#2ecc71';
+            // Actualizar mensaje de estado
+            document.getElementById('statusMessage').innerHTML = '<div style="color: var(--success);"><i class="fas fa-check-circle"></i> ¡Redireccionando a Telegram! Por favor envía la captura.</div>';
+            
+            // Crear corazones
+            createHearts(15);
         }
         
+        // Función para generar código único
+        function generateUniqueCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 8; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            uniqueCode = code;
+            document.getElementById('uniqueCode').textContent = 'Código: ' + code;
+        }
+        
+        // Función para crear corazones animados
+        function createHearts(count) {
+            const container = document.querySelector('body');
+            
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('payment-heart');
+                
+                // Posición aleatoria
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '100vh';
+                
+                // Tamaño aleatorio
+                const size = Math.random() * 20 + 10;
+                heart.style.width = size + 'px';
+                heart.style.height = size + 'px';
+                
+                // Animación
+                heart.style.animation = `paymentHearts ${Math.random() * 3 + 2}s linear forwards`;
+                
+                container.appendChild(heart);
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }
+        }
+        
+        // Función para seleccionar un servicio
+        function selectService(element) {
+            // Quitar selección anterior
+            const cards = document.querySelectorAll('.service-card');
+            cards.forEach(card => {
+                card.classList.remove('selected');
+                card.classList.remove('pulse');
+            });
+            
+            // Seleccionar nuevo servicio
+            element.classList.add('selected');
+            selectedService = element;
+            
+            // Crear confeti
+            createConfetti();
+            
+            // Desplazarse automáticamente a la sección de pago
+            scrollToPaymentSection();
+        }
+        
+        // Función para desplazarse a la sección de pago
+        function scrollToPaymentSection() {
+            const paymentSection = document.getElementById('payment-section');
+            if (paymentSection) {
+                // Calcular la posición de la sección de pago
+                const paymentSectionTop = paymentSection.getBoundingClientRect().top + window.pageYOffset;
+                
+                // Desplazarse suavemente a la sección de pago
+                window.scrollTo({
+                    top: paymentSectionTop - 50, // Un poco más arriba para mejor visibilidad
+                    behavior: 'smooth'
+                });
+                
+                // Resaltar la sección de pago
+                paymentSection.style.boxShadow = '0 0 0 3px rgba(138, 43, 226, 0.5)';
+                setTimeout(() => {
+                    paymentSection.style.boxShadow = '';
+                }, 2000);
+            }
+        }
+        
+        // Función para crear confeti
+        function createConfetti() {
+            const container = document.querySelector('body');
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Color aleatorio
+                const colors = ['#8a2be2', '#ff4d94', '#00c2cb', '#ffffff'];
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Posición aleatoria
+                confetti.style.left = Math.random() * 100 + 'vw';
+                
+                // Tamaño aleatorio
+                const size = Math.random() * 10 + 5;
+                confetti.style.width = size + 'px';
+                confetti.style.height = size + 'px';
+                
+                // Animación
+                confetti.style.animation = `confettiFall ${Math.random() * 2 + 1}s linear forwards`;
+                
+                container.appendChild(confetti);
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+        
+        // Función para mostrar vista previa de red social
         function showPreview(network) {
             const data = socialNetworks[network];
+            
             document.getElementById('previewTitle').textContent = data.title;
-            document.getElementById('previewIcon').innerHTML = `<i class="${data.icon}" style="color: ${data.color};"></i>`;
+            document.getElementById('previewIcon').className = data.icon;
+            document.getElementById('previewIcon').style.color = data.color;
             document.getElementById('previewText').textContent = data.text;
             document.getElementById('previewLink').href = data.link;
             document.getElementById('previewLink').style.background = data.color;
@@ -1508,278 +1441,56 @@
             document.getElementById('overlay').style.display = 'block';
         }
         
+        // Función para cerrar vista previa
         function closePreview() {
             document.getElementById('socialPreview').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
         }
         
-        function showScreenshotModal(details) {
-            paymentDetails = details;
-            
-            document.getElementById('detail-name').textContent = details.name;
-            document.getElementById('detail-email').textContent = details.email;
-            document.getElementById('detail-service').textContent = details.service;
-            document.getElementById('detail-amount').textContent = `$${details.amount}.00`;
-            document.getElementById('detail-date').textContent = details.date;
-            document.getElementById('detail-time').textContent = details.time;
-            
-            uniqueCode = generateUniqueCode();
-            document.getElementById('uniqueCode').textContent = `Código: ${uniqueCode}`;
-            
-            document.getElementById('screenshotModal').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-            
-            document.getElementById('statusMessage').innerHTML = '';
-            document.getElementById('statusMessage').style.color = '';
-            
-            sendTelegramNotification(uniqueCode, details);
-            
-            createHearts();
-        }
-        
-        function closeScreenshotModal() {
-            document.getElementById('screenshotModal').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
-        
-        function selectService(card) {
-            const cards = document.querySelectorAll('.service-card');
-            cards.forEach(c => {
-                c.classList.remove('selected');
-                c.classList.remove('pulse');
+        // Cerrar modales al hacer clic en el overlay
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.querySelectorAll('.modal, .social-preview, .screenshot-modal').forEach(modal => {
+                modal.style.display = 'none';
             });
-            
-            card.classList.add('selected');
-            selectedService = card;
-            
-            const price = card.getAttribute('data-price');
-            document.getElementById('amount').textContent = price + '.00';
-            
-            createConfetti();
-            
-            document.getElementById('payment-section').scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-            
-            createPaymentHearts();
-        }
-        
-        function selectCardOption(option) {
-            const options = document.querySelectorAll('.card-option');
-            options.forEach(o => o.classList.remove('selected'));
-            option.classList.add('selected');
-        }
-        
-        function processCardPayment() {
-            if (!selectedService) {
-                showNotification('Por favor selecciona un servicio antes de pagar.', 'error');
-                return;
-            }
-            
-            // Validar campos requeridos
-            const requiredFields = document.querySelectorAll('input[required]');
-            let valid = true;
-            
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.style.borderColor = '#ff4d94';
-                    valid = false;
-                } else {
-                    field.style.borderColor = '';
-                }
-            });
-            
-            if (!valid) {
-                showNotification('Por favor completa todos los campos requeridos.', 'error');
-                return;
-            }
-            
-            // Validar checkbox de edad
-            const ageCheckbox = document.getElementById('ageConfirm');
-            if (!ageCheckbox.checked) {
-                showNotification('Debes confirmar que eres mayor de 18 años para continuar.', 'error');
-                return;
-            }
-            
-            // Simular procesamiento de pago
-            showNotification('Procesando pago...', 'info');
-            
-            setTimeout(() => {
-                const now = new Date();
-                const date = now.toLocaleDateString();
-                const time = now.toLocaleTimeString();
-                
-                const paymentDetails = {
-                    name: document.querySelector('input[placeholder="Nombre"]').value + ' ' + document.querySelector('input[placeholder="Apellido"]').value,
-                    email: document.querySelector('input[type="email"]').value,
-                    service: selectedService.getAttribute('data-service'),
-                    amount: selectedService.getAttribute('data-price'),
-                    date: date,
-                    time: time
-                };
-                
-                showScreenshotModal(paymentDetails);
-            }, 2000);
-        }
-        
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.textContent = message;
-            notification.style.position = 'fixed';
-            notification.style.bottom = '20px';
-            notification.style.right = '20px';
-            notification.style.padding = '15px 20px';
-            notification.style.borderRadius = '10px';
-            notification.style.color = 'white';
-            notification.style.fontWeight = '500';
-            notification.style.zIndex = '1000';
-            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
-            notification.style.transform = 'translateX(100px)';
-            notification.style.opacity = '0';
-            notification.style.transition = 'all 0.5s';
-            
-            if (type === 'error') {
-                notification.style.background = 'linear-gradient(90deg, #ff4d94, #ff3366)';
-            } else if (type === 'success') {
-                notification.style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
-            } else {
-                notification.style.background = 'linear-gradient(90deg, #8a2be2, #6a11cb)';
-            }
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-                notification.style.opacity = '1';
-            }, 10);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100px)';
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 500);
-            }, 3000);
-        }
-        
-        function createConfetti() {
-            const colors = ['#8a2be2', '#ff4d94', '#00c2cb', '#2ecc71', '#f1c40f'];
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.top = '-10px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = (Math.random() * 10 + 5) + 'px';
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                document.body.appendChild(confetti);
-                
-                const animation = confetti.animate([
-                    { top: '-10px', opacity: 1, transform: 'rotate(0deg)' },
-                    { top: '100vh', opacity: 0, transform: 'rotate(720deg)' }
-                ], {
-                    duration: Math.random() * 3000 + 2000,
-                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
-                });
-                
-                animation.onfinish = () => {
-                    document.body.removeChild(confetti);
-                };
-            }
-        }
-        
-        function createPaymentHearts() {
-            const paymentSection = document.getElementById('payment-section');
-            const colors = ['#ff4d94', '#8a2be2', '#00c2cb', '#ff3366', '#ff6b6b'];
-            
-            for (let i = 0; i < 20; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'payment-heart';
-                
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.bottom = '0';
-                
-                heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                paymentSection.appendChild(heart);
-                
-                const animation = heart.animate([
-                    { transform: 'translateY(100%) rotate(0deg)', opacity: 1 },
-                    { transform: 'translateY(-100%) rotate(360deg)', opacity: 0 }
-                ], {
-                    duration: Math.random() * 2000 + 2000,
-                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
-                });
-                
-                animation.onfinish = () => {
-                    paymentSection.removeChild(heart);
-                };
-            }
-        }
-        
-        function createHearts() {
-            for (let i = 0; i < 20; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'hearts';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.top = '100vh';
-                document.body.appendChild(heart);
-                
-                const animation = heart.animate([
-                    { top: '100vh', opacity: 1, transform: 'rotate(0deg)' },
-                    { top: '0vh', opacity: 0, transform: 'rotate(360deg)' }
-                ], {
-                    duration: Math.random() * 3000 + 2000,
-                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
-                });
-                
-                animation.onfinish = () => {
-                    document.body.removeChild(heart);
-                };
-            }
-        }
-        
-        // Efecto de escritura para el título y subtítulo
-        document.addEventListener('DOMContentLoaded', function() {
-            const titleElement = document.getElementById('animated-title');
-            const subtitleElement = document.getElementById('animated-subtitle');
-            const titleText = "✨TU ACCESO A MI MUNDO PRIVADO✨ Contenido ardiente, donde tú eres el protagonista ✨";
-            const subtitleText = "🎯 ¿CUÁL ELIGES?… Todo está a un clic de distancia… ¿te atreves?😏💋";
-            
-            titleElement.innerHTML = '';
-            subtitleElement.innerHTML = '';
-            
-            let i = 0;
-            
-            const titleTypeWriter = setInterval(function() {
-                if (i < titleText.length) {
-                    titleElement.innerHTML += titleText.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(titleTypeWriter);
-                    setTimeout(startSubtitleAnimation, 300);
-                }
-            }, 25);
-            
-            function startSubtitleAnimation() {
-                let j = 0;
-                const subtitleTypeWriter = setInterval(function() {
-                    if (j < subtitleText.length) {
-                        subtitleElement.innerHTML += subtitleText.charAt(j);
-                        j++;
-                    } else {
-                        clearInterval(subtitleTypeWriter);
-                    }
-                }, 15);
-            }
-            
-            setInterval(() => {
-                createHearts();
-            }, 5000);
+            this.style.display = 'none';
         });
+        
+        // Animación de título - TEXTO ORIGINAL CORREGIDO
+        const titleText = "✨TU ACCESO A MI MUNDO PRIVADO✨ Contenido ardiente, donde tú eres el protagonista ✨";
+        const subtitleText = "🎯 ¿CUÁL ELIGES?… Todo está a un clic de distancia… ¿te atreves?😏💋";
+        let titleIndex = 0;
+        let subtitleIndex = 0;
+        
+        function typeTitle() {
+            if (titleIndex < titleText.length) {
+                document.getElementById('animated-title').textContent += titleText.charAt(titleIndex);
+                titleIndex++;
+                setTimeout(typeTitle, 35);
+            } else {
+                document.getElementById('animated-title').style.borderRight = 'none';
+                setTimeout(typeSubtitle, 500);
+            }
+        }
+        
+        function typeSubtitle() {
+            if (subtitleIndex < subtitleText.length) {
+                document.getElementById('animated-subtitle').textContent += subtitleText.charAt(subtitleIndex);
+                subtitleIndex++;
+                setTimeout(typeSubtitle, 25);
+            } else {
+                document.getElementById('animated-subtitle').style.borderRight = 'none';
+            }
+        }
+        
+        // Iniciar animaciones cuando la página cargue
+        window.onload = function() {
+            typeTitle();
+            
+            // Iniciar animación de corazones
+            setInterval(() => {
+                createHearts(3);
+            }, 3000);
+        };
     </script>
 </body>
 </html>
