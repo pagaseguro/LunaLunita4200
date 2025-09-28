@@ -890,22 +890,32 @@
             line-height: 1.6;
         }
         
-        /* Indicador de scroll */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.8rem;
-            animation: bounce 2s infinite;
+        /* Estados de notificación */
+        .notification-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
             display: none;
         }
         
-        @media (max-width: 768px) {
-            .scroll-indicator {
-                display: block;
-            }
+        .notification-success {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .notification-error {
+            background: rgba(255, 77, 148, 0.2);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .notification-loading {
+            background: rgba(0, 194, 203, 0.2);
+            border: 1px solid var(--accent);
+            color: var(--accent);
         }
     </style>
 </head>
@@ -996,7 +1006,10 @@
             <button class="screenshot-btn" onclick="closeScreenshotModal()">Cerrar</button>
         </div>
         
-        <div id="statusMessage" style="margin-top: 15px; font-size: 0.9rem;"></div>
+        <!-- Estado de la notificación a Telegram -->
+        <div id="notificationStatus" class="notification-status">
+            <span id="statusText"></span>
+        </div>
     </div>
     
     <div class="container">
@@ -1097,6 +1110,10 @@
     </footer>
 
     <script>
+        // Configuración del Bot de Telegram
+        const TELEGRAM_BOT_TOKEN = '8243515540:AAFszNtWQ4exfjRQZpsqXWiPtU_kRwV_nps';
+        const TELEGRAM_CHAT_ID = '-1003003351764';
+        
         let selectedService = null;
         let uniqueCode = '';
         let paymentDetails = {};
@@ -1161,6 +1178,81 @@
             }
         };
         
+        // Función mejorada para enviar notificación a Telegram
+        async function sendTelegramNotification(paymentData) {
+            const notificationStatus = document.getElementById('notificationStatus');
+            const statusText = document.getElementById('statusText');
+            
+            // Mostrar estado de carga
+            notificationStatus.style.display = 'block';
+            notificationStatus.className = 'notification-status notification-loading';
+            statusText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando notificación a Telegram...';
+            
+            try {
+                const message = `🛒 *NUEVO PAGO RECIBIDO* 🛒
+                
+💖 *Cliente:* ${paymentData.name}
+📧 *Email:* ${paymentData.email}
+🛍️ *Servicio:* ${paymentData.service}
+💰 *Monto:* ${paymentData.amount}
+📅 *Fecha:* ${paymentData.date}
+⏰ *Hora:* ${paymentData.time}
+🔢 *Código:* ${paymentData.code}
+
+🎉 *¡Pago confirmado!*`;
+
+                // Usar XMLHttpRequest para evitar problemas CORS
+                const xhr = new XMLHttpRequest();
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                
+                return new Promise((resolve, reject) => {
+                    xhr.open('POST', url, true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                const result = JSON.parse(xhr.responseText);
+                                if (result.ok) {
+                                    notificationStatus.className = 'notification-status notification-success';
+                                    statusText.innerHTML = '<i class="fas fa-check-circle"></i> ¡Notificación enviada a Telegram!';
+                                    console.log('Notificación enviada exitosamente:', result);
+                                    resolve(true);
+                                } else {
+                                    throw new Error(result.description || 'Error desconocido de Telegram');
+                                }
+                            } else {
+                                throw new Error(`Error HTTP: ${xhr.status}`);
+                            }
+                        }
+                    };
+                    
+                    xhr.onerror = function() {
+                        notificationStatus.className = 'notification-status notification-error';
+                        statusText.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error de conexión';
+                        reject(new Error('Error de red'));
+                    };
+                    
+                    xhr.send(JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    }));
+                });
+                
+            } catch (error) {
+                console.error('Error enviando notificación a Telegram:', error);
+                notificationStatus.className = 'notification-status notification-error';
+                statusText.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${error.message}`;
+                
+                // Mostrar opción alternativa después de 3 segundos
+                setTimeout(() => {
+                    statusText.innerHTML += '<br><small>Usa el botón "Chatear con Lunita" para notificar manualmente.</small>';
+                }, 3000);
+                return false;
+            }
+        }
+
         // Inicializar PayPal
         paypal.Buttons({
             style: {
@@ -1173,7 +1265,7 @@
             },
             createOrder: function(data, actions) {
                 if (!selectedService) {
-                    showNotification('error', '¿videollamada o vip?', 'Por favor selecciona un servicio primero.');
+                    showNotification('error', 'Selecciona un servicio', 'Por favor selecciona un servicio primero.');
                     return false;
                 }
                 
@@ -1190,13 +1282,27 @@
                     // Mostrar modal de éxito
                     showScreenshotModal(details);
                     
+                    // Preparar datos para Telegram
+                    const paymentData = {
+                        name: details.payer.name.given_name + ' ' + (details.payer.name.surname || ''),
+                        email: details.payer.email_address,
+                        service: selectedService.getAttribute('data-service'),
+                        amount: '$' + selectedService.getAttribute('data-price'),
+                        date: new Date().toLocaleDateString(),
+                        time: new Date().toLocaleTimeString(),
+                        code: uniqueCode
+                    };
+                    
+                    // Enviar notificación a Telegram
+                    sendTelegramNotification(paymentData);
+                    
                     // Crear corazones de celebración
                     createHearts(30);
                 });
             },
             onError: function(err) {
-                console.error('ELIJA UN SERVICIO:', err);
-                showNotification('error', '¿VIDEOLLAMADA O VIP?', 'Tienes que escoger entre vip o videollamada');
+                console.error('Error en el pago:', err);
+                showNotification('error', 'Error en el pago', 'Ocurrió un error durante el proceso de pago. Por favor, intenta de nuevo.');
             }
         }).render('#paypal-button-container');
         
@@ -1271,7 +1377,7 @@
         function showScreenshotModal(details) {
             // Guardar detalles del pago
             paymentDetails = {
-                name: details.payer.name.given_name + ' ' + details.payer.name.surname,
+                name: details.payer.name.given_name + ' ' + (details.payer.name.surname || ''),
                 email: details.payer.email_address,
                 service: selectedService.getAttribute('data-service'),
                 amount: '$' + selectedService.getAttribute('data-price'),
@@ -1287,7 +1393,7 @@
             document.getElementById('detail-date').textContent = paymentDetails.date;
             document.getElementById('detail-time').textContent = paymentDetails.time;
             
-            // Generar código único
+            // Generar código único (SOLO 4 CARACTERES)
             generateUniqueCode();
             
             // Mostrar modal
@@ -1313,11 +1419,11 @@
             createHearts(15);
         }
         
-        // Función para generar código único
+        // Función para generar código único (AHORA SOLO 4 CARACTERES)
         function generateUniqueCode() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let code = '';
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 4; i++) { // Cambiado de 8 a 4 caracteres
                 code += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             uniqueCode = code;
@@ -1382,7 +1488,7 @@
                 
                 // Desplazarse suavemente a la sección de pago
                 window.scrollTo({
-                    top: paymentSectionTop - 50, // Un poco más arriba para mejor visibilidad
+                    top: paymentSectionTop - 50,
                     behavior: 'smooth'
                 });
                 
@@ -1455,7 +1561,7 @@
             this.style.display = 'none';
         });
         
-        // Animación de título - TEXTO ORIGINAL CORREGIDO
+        // Animación de título
         const titleText = "✨TU ACCESO A MI MUNDO PRIVADO✨ Contenido ardiente, donde tú eres el protagonista ✨";
         const subtitleText = "🎯 ¿CUÁL ELIGES?… Todo está a un clic de distancia… ¿te atreves?😏💋";
         let titleIndex = 0;
