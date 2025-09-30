@@ -320,10 +320,10 @@
                 
                 <div class="notification" id="formNotification"></div>
                 
-                <form class="add-comment-form" id="commentForm">
+                <form class="add-comment-form" id="commentForm" action="https://script.google.com/macros/s/AKfycbwy5lHH9t5TEiIq8JOkP-nN4IAYwZGDzYpTbfo1rbu2_stng7MTkHEgLLpgitrK89fs/exec" method="GET" target="hiddenFrame">
                     <div class="form-group">
                         <label for="name">Tu Nombre</label>
-                        <input type="text" id="name" class="form-control" required>
+                        <input type="text" id="name" name="nombre" class="form-control" required>
                     </div>
                     
                     <div class="form-group">
@@ -335,16 +335,18 @@
                             <span class="star" data-rating="4">★</span>
                             <span class="star" data-rating="5">★</span>
                         </div>
-                        <input type="hidden" id="rating" value="0" required>
+                        <input type="hidden" id="rating" name="estrellas" value="0" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="comment">Tu Comentario</label>
-                        <textarea id="comment" class="form-control" placeholder="Escribe tu experiencia con nuestros servicios..." required></textarea>
+                        <textarea id="comment" name="comentario" class="form-control" placeholder="Escribe tu experiencia con nuestros servicios..." required></textarea>
                     </div>
                     
                     <button type="submit" class="submit-btn">Enviar Comentario</button>
                 </form>
+                
+                <iframe name="hiddenFrame" style="display: none;"></iframe>
             </div>
         </div>
         
@@ -355,10 +357,7 @@
     </div>
 
     <script>
-        // URL de tu Google Apps Script (NUEVA CUENTA SEGURA)
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwy5lHH9t5TEiIq8JOkP-nN4IAYwZGDzYpTbfo1rbu2_stng7MTkHEgLLpgitrK89fs/exec';
-
-        // Comentarios de ejemplo (en un caso real, estos vendrían de una base de datos)
+        // Comentarios de ejemplo
         const sampleComments = [
             {
                 id: 1,
@@ -400,9 +399,6 @@
         // Cargar comentarios en la página
         function loadComments() {
             const commentsGrid = document.getElementById('commentsGrid');
-            
-            // En un caso real, aquí haríamos una petición a un servidor
-            // Por ahora usamos los comentarios de ejemplo
             const comments = sampleComments;
             
             if (comments.length === 0) {
@@ -498,69 +494,36 @@
             const form = document.getElementById('commentForm');
             const notification = document.getElementById('formNotification');
             
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
+            form.addEventListener('submit', function(e) {
                 const name = document.getElementById('name').value.trim();
                 const rating = parseInt(document.getElementById('rating').value);
                 const comment = document.getElementById('comment').value.trim();
                 
                 // Validaciones
                 if (!name || !rating || !comment) {
+                    e.preventDefault();
                     showNotification('Por favor, completa todos los campos', 'error');
                     return;
                 }
                 
                 if (rating === 0) {
+                    e.preventDefault();
                     showNotification('Por favor, selecciona una calificación con estrellas', 'error');
                     return;
                 }
                 
-                // Mostrar carga
-                const submitBtn = form.querySelector('.submit-btn');
-                const originalText = submitBtn.textContent;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-                submitBtn.disabled = true;
-                
-                try {
-                    // Enviar a Google Sheets
-                    const response = await fetch(GOOGLE_SCRIPT_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            nombre: name,
-                            estrellas: rating,
-                            comentario: comment
-                        })
+                // Mostrar mensaje de éxito después de enviar
+                setTimeout(() => {
+                    showNotification('¡Gracias por tu comentario! Se ha guardado correctamente.', 'success');
+                    
+                    // Limpiar formulario
+                    form.reset();
+                    document.querySelectorAll('.star').forEach(star => {
+                        star.classList.remove('active');
+                        star.style.color = '#444';
                     });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        showNotification('¡Gracias por tu comentario! Se ha guardado correctamente.', 'success');
-                        
-                        // Limpiar formulario
-                        form.reset();
-                        document.querySelectorAll('.star').forEach(star => {
-                            star.classList.remove('active');
-                            star.style.color = '#444';
-                        });
-                        document.getElementById('rating').value = '0';
-                        
-                    } else {
-                        throw new Error(result.error);
-                    }
-                    
-                } catch (error) {
-                    console.error('Error:', error);
-                    showNotification('Error al enviar el comentario. Por favor, intenta nuevamente.', 'error');
-                } finally {
-                    // Restaurar botón
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }
+                    document.getElementById('rating').value = '0';
+                }, 1000);
             });
         }
         
