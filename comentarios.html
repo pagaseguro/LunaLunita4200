@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentarios de Clientes | LunaLunita</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #ff4d94;
+            --accent: #00c2cb;
+            --dark: #1e0a3c;
+            --light: #f8f9fa;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(-45deg, #1e0a3c, #8a2be2, #ff4d94, #00c2cb);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(30, 10, 60, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        header {
+            background: rgba(30, 10, 60, 0.9);
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff4d94, #8a2be2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .comments-section, .add-comment-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        
+        .comments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .comment-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .comment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .comment-stars {
+            color: gold;
+        }
+        
+        .comment-date {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .comment-text {
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        
+        .add-comment-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .stars-rating {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .star {
+            font-size: 24px;
+            color: #444;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .star.active, .star:hover {
+            color: gold;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .notification {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .notification.success {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .notification.error {
+            background: rgba(255, 77, 148, 0.2);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+        
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 15px 0;
+            }
+            
+            header {
+                padding: 25px 15px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .comments-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .add-comment-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Comentarios de Clientes</h1>
+            <p>Lo que dicen nuestros clientes sobre los servicios de LunaLunita</p>
+        </header>
+        
+        <div class="content">
+            <div class="comments-section">
+                <h2 class="section-title">Comentarios Aprobados</h2>
+                
+                <div class="comments-grid" id="commentsGrid">
+                    <!-- Los comentarios se cargarán aquí -->
+                </div>
+            </div>
+            
+            <div class="add-comment-section">
+                <h2 class="section-title">Deja tu Comentario</h2>
+                
+                <div class="notification" id="formNotification"></div>
+                
+                <form class="add-comment-form" id="commentForm">
+                    <div class="form-group">
+                        <label for="name">Tu Nombre</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Calificación con Estrellas</label>
+                        <div class="stars-rating" id="starsRating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                        <input type="hidden" id="rating" value="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comment">Tu Comentario</label>
+                        <textarea id="comment" class="form-control" placeholder="Escribe tu experiencia con nuestros servicios..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Enviar Comentario</button>
+                </form>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 LunaLunita. Todos los derechos reservados.</p>
+            <p><a href="index.html">Volver a la página principal</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Comentarios de ejemplo (en un caso real, estos vendrían de una base de datos)
+        const sampleComments = [
+            {
+                id: 1,
+                name: "María G.",
+                rating: 5,
+                comment: "Excelente servicio! La atención es personalizada y de muy alta calidad. Definitivamente volveré a contratar.",
+                date: "2023-10-15"
+            },
+            {
+                id: 2,
+                name: "Carlos R.",
+                rating: 4,
+                comment: "Muy contento con el servicio. Rápido, profesional y con resultados que superaron mis expectativas.",
+                date: "2023-10-10"
+            },
+            {
+                id: 3,
+                name: "Ana S.",
+                rating: 5,
+                comment: "Increíble experiencia! LunaLunita es muy talentosa y creativa. Recomiendo 100% sus servicios.",
+                date: "2023-10-05"
+            },
+            {
+                id: 4,
+                name: "Javier M.",
+                rating: 5,
+                comment: "La mejor inversión que he hecho. Calidad premium y atención excepcional. No puedo estar más satisfecho.",
+                date: "2023-09-28"
+            }
+        ];
+        
+        // Inicialización cuando el DOM está listo
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComments();
+            initializeStarRating();
+            initializeCommentForm();
+        });
+        
+        // Cargar comentarios en la página
+        function loadComments() {
+            const commentsGrid = document.getElementById('commentsGrid');
+            
+            // En un caso real, aquí haríamos una petición a un servidor
+            // Por ahora usamos los comentarios de ejemplo
+            const comments = sampleComments;
+            
+            if (comments.length === 0) {
+                commentsGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Aún no hay comentarios. ¡Sé el primero en dejar uno!</p>';
+                return;
+            }
+            
+            // Ordenar comentarios por fecha (más recientes primero)
+            comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Generar HTML para cada comentario
+            commentsGrid.innerHTML = comments.map(comment => `
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <div class="comment-author">${comment.name}</div>
+                        <div class="comment-stars">${generateStars(comment.rating)}</div>
+                    </div>
+                    <div class="comment-date">${formatDate(comment.date)}</div>
+                    <div class="comment-text">${comment.comment}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Generar estrellas según la calificación
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '★';
+                } else {
+                    stars += '☆';
+                }
+            }
+            return stars;
+        }
+        
+        // Formatear fecha
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+        
+        // Inicializar sistema de calificación con estrellas
+        function initializeStarRating() {
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    ratingInput.value = rating;
+                    
+                    // Actualizar visualización de estrellas
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-rating')) <= rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Efecto hover
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-rating')) <= rating) {
+                            s.style.color = 'gold';
+                        } else {
+                            s.style.color = '#444';
+                        }
+                    });
+                });
+                
+                // Restaurar al quitar el mouse
+                star.addEventListener('mouseout', function() {
+                    const currentRating = parseInt(ratingInput.value);
+                    
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-rating')) <= currentRating) {
+                            s.style.color = 'gold';
+                        } else {
+                            s.style.color = '#444';
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Inicializar formulario de comentarios
+        function initializeCommentForm() {
+            const form = document.getElementById('commentForm');
+            const notification = document.getElementById('formNotification');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value.trim();
+                const rating = parseInt(document.getElementById('rating').value);
+                const comment = document.getElementById('comment').value.trim();
+                
+                // Validaciones
+                if (!name || !rating || !comment) {
+                    showNotification('Por favor, completa todos los campos', 'error');
+                    return;
+                }
+                
+                if (rating === 0) {
+                    showNotification('Por favor, selecciona una calificación con estrellas', 'error');
+                    return;
+                }
+                
+                // En un caso real, aquí enviaríamos los datos a un servidor
+                // Por ahora solo mostramos un mensaje de éxito
+                
+                showNotification('¡Gracias por tu comentario! Será revisado antes de publicarse.', 'success');
+                
+                // Limpiar formulario
+                form.reset();
+                document.querySelectorAll('.star').forEach(star => {
+                    star.classList.remove('active');
+                    star.style.color = '#444';
+                });
+                document.getElementById('rating').value = '0';
+            });
+        }
+        
+        // Mostrar notificación
+        function showNotification(message, type) {
+            const notification = document.getElementById('formNotification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
