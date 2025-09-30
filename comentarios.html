@@ -253,6 +253,12 @@
             color: var(--secondary);
         }
         
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--accent);
+        }
+        
         footer {
             text-align: center;
             padding: 20px;
@@ -311,7 +317,9 @@
                 <h2 class="section-title">Comentarios Aprobados</h2>
                 
                 <div class="comments-grid" id="commentsGrid">
-                    <!-- Los comentarios se cargarán aquí -->
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Cargando comentarios...
+                    </div>
                 </div>
             </div>
             
@@ -358,38 +366,9 @@
         // URL ACTUALIZADA - NUEVA IMPLEMENTACIÓN
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFIOR1UOYgZMC0YZDJyrLTB2ScPk8RbfviCYJueVe_zaiS6h2JQ8R7a5wH7XzjqpLh_w/exec';
 
-        // Comentarios de ejemplo
-        const sampleComments = [
-            {
-                id: 1,
-                name: "María G.",
-                rating: 5,
-                comment: "Excelente servicio! La atención es personalizada y de muy alta calidad. Definitivamente volveré a contratar.",
-                date: "2023-10-15"
-            },
-            {
-                id: 2,
-                name: "Carlos R.",
-                rating: 4,
-                comment: "Muy contento con el servicio. Rápido, profesional y con resultados que superaron mis expectativas.",
-                date: "2023-10-10"
-            },
-            {
-                id: 3,
-                name: "Ana S.",
-                rating: 5,
-                comment: "Increíble experiencia! LunaLunita es muy talentosa y creativa. Recomiendo 100% sus servicios.",
-                date: "2023-10-05"
-            },
-            {
-                id: 4,
-                name: "Javier M.",
-                rating: 5,
-                comment: "La mejor inversión que he hecho. Calidad premium y atención excepcional. No puedo estar más satisfecho.",
-                date: "2023-09-28"
-            }
-        ];
-        
+        // URL para OBTENER comentarios (necesitas crear esta función)
+        const GOOGLE_SCRIPT_GET_URL = 'https://script.google.com/macros/s/AKfycbzFIOR1UOYgZMC0YZDJyrLTB2ScPk8RbfviCYJueVe_zaiS6h2JQ8R7a5wH7XzjqpLh_w/exec?action=getComments';
+
         // Inicialización cuando el DOM está listo
         document.addEventListener('DOMContentLoaded', function() {
             loadComments();
@@ -397,34 +376,96 @@
             initializeCommentForm();
         });
         
-        // Cargar comentarios en la página
-        function loadComments() {
+        // Cargar comentarios REALES desde Google Sheets
+        async function loadComments() {
             const commentsGrid = document.getElementById('commentsGrid');
-            const comments = sampleComments;
+            
+            try {
+                // Intenta cargar comentarios reales
+                const response = await fetch(GOOGLE_SCRIPT_GET_URL);
+                const realComments = await response.json();
+                
+                if (realComments && realComments.length > 0) {
+                    // Filtrar solo comentarios APROBADOS
+                    const comentariosAprobados = realComments.filter(comment => 
+                        comment.estado && comment.estado.toLowerCase() === 'aprobado'
+                    );
+                    
+                    if (comentariosAprobados.length > 0) {
+                        displayComments(comentariosAprobados);
+                        return;
+                    }
+                }
+                
+                // Si no hay comentarios reales, mostrar mensaje
+                commentsGrid.innerHTML = `
+                    <div style="text-align: center; grid-column: 1 / -1;">
+                        <p>🎉 ¡Sé el primero en dejar un comentario!</p>
+                        <p><small>Los comentarios aparecerán aquí después de ser aprobados.</small></p>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.log('No se pudieron cargar comentarios reales, mostrando ejemplos');
+                // Si hay error, mostrar comentarios de ejemplo temporalmente
+                displaySampleComments();
+            }
+        }
+        
+        // Mostrar comentarios en la página
+        function displayComments(comments) {
+            const commentsGrid = document.getElementById('commentsGrid');
             
             if (comments.length === 0) {
-                commentsGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Aún no hay comentarios. ¡Sé el primero en dejar uno!</p>';
+                commentsGrid.innerHTML = `
+                    <div style="text-align: center; grid-column: 1 / -1;">
+                        <p>📝 Aún no hay comentarios aprobados.</p>
+                        <p><small>Los comentarios aparecerán aquí después de ser revisados.</small></p>
+                    </div>
+                `;
                 return;
             }
             
             // Ordenar comentarios por fecha (más recientes primero)
-            comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+            comments.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
             
             // Generar HTML para cada comentario
             commentsGrid.innerHTML = comments.map(comment => `
                 <div class="comment-card">
                     <div class="comment-header">
-                        <div class="comment-author">${comment.name}</div>
-                        <div class="comment-stars">${generateStars(comment.rating)}</div>
+                        <div class="comment-author">${comment.nombre || 'Anónimo'}</div>
+                        <div class="comment-stars">${generateStars(comment.estrellas)}</div>
                     </div>
-                    <div class="comment-date">${formatDate(comment.date)}</div>
-                    <div class="comment-text">${comment.comment}</div>
+                    <div class="comment-date">${formatDate(comment.fecha)}</div>
+                    <div class="comment-text">${comment.comentario || ''}</div>
                 </div>
             `).join('');
         }
         
+        // Mostrar comentarios de ejemplo (temporal)
+        function displaySampleComments() {
+            const sampleComments = [
+                {
+                    nombre: "María G.",
+                    estrellas: 5,
+                    comentario: "Excelente servicio! La atención es personalizada y de muy alta calidad. Definitivamente volveré a contratar.",
+                    fecha: "2023-10-15"
+                },
+                {
+                    nombre: "Carlos R.",
+                    estrellas: 4,
+                    comentario: "Muy contento con el servicio. Rápido, profesional y con resultados que superaron mis expectativas.",
+                    fecha: "2023-10-10"
+                }
+            ];
+            
+            displayComments(sampleComments);
+        }
+        
         // Generar estrellas según la calificación
         function generateStars(rating) {
+            if (!rating) return '☆☆☆☆☆';
+            
             let stars = '';
             for (let i = 1; i <= 5; i++) {
                 if (i <= rating) {
@@ -438,8 +479,14 @@
         
         // Formatear fecha
         function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('es-ES', options);
+            if (!dateString) return 'Fecha no disponible';
+            
+            try {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString('es-ES', options);
+            } catch (error) {
+                return dateString;
+            }
         }
         
         // Inicializar sistema de calificación con estrellas
@@ -534,7 +581,7 @@
                     const result = await response.json();
                     
                     if (result.success) {
-                        showNotification('¡Gracias por tu comentario! Se ha guardado correctamente.', 'success');
+                        showNotification('¡Gracias por tu comentario! Será revisado antes de publicarse.', 'success');
                         
                         // Limpiar formulario
                         form.reset();
@@ -543,6 +590,11 @@
                             star.style.color = '#444';
                         });
                         document.getElementById('rating').value = '0';
+                        
+                        // Recargar comentarios después de 3 segundos
+                        setTimeout(() => {
+                            loadComments();
+                        }, 3000);
                         
                     } else {
                         throw new Error(result.error);
