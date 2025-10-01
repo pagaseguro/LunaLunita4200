@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* MANTÉN TODO TU CSS ORIGINAL IGUAL */
         :root {
             --primary: #8a2be2;
             --secondary: #ff4d94;
@@ -257,6 +258,14 @@
             text-align: center;
             padding: 20px;
             color: var(--accent);
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.7);
         }
         
         footer {
@@ -363,11 +372,8 @@
     </div>
 
     <script>
-        // URL ACTUALIZADA - NUEVA IMPLEMENTACIÓN
+        // URL ACTUALIZADA
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFIOR1UOYgZMC0YZDJyrLTB2ScPk8RbfviCYJueVe_zaiS6h2JQ8R7a5wH7XzjqpLh_w/exec';
-
-        // URL para OBTENER comentarios (necesitas crear esta función)
-        const GOOGLE_SCRIPT_GET_URL = 'https://script.google.com/macros/s/AKfycbzFIOR1UOYgZMC0YZDJyrLTB2ScPk8RbfviCYJueVe_zaiS6h2JQ8R7a5wH7XzjqpLh_w/exec?action=getComments';
 
         // Inicialización cuando el DOM está listo
         document.addEventListener('DOMContentLoaded', function() {
@@ -381,34 +387,23 @@
             const commentsGrid = document.getElementById('commentsGrid');
             
             try {
-                // Intenta cargar comentarios reales
-                const response = await fetch(GOOGLE_SCRIPT_GET_URL);
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getComments');
                 const realComments = await response.json();
                 
                 if (realComments && realComments.length > 0) {
                     // Filtrar solo comentarios APROBADOS
                     const comentariosAprobados = realComments.filter(comment => 
-                        comment.estado && comment.estado.toLowerCase() === 'aprobado'
+                        comment.estado && comment.estado.toString().toLowerCase() === 'aprobado'
                     );
                     
-                    if (comentariosAprobados.length > 0) {
-                        displayComments(comentariosAprobados);
-                        return;
-                    }
+                    displayComments(comentariosAprobados);
+                } else {
+                    showEmptyState();
                 }
                 
-                // Si no hay comentarios reales, mostrar mensaje
-                commentsGrid.innerHTML = `
-                    <div style="text-align: center; grid-column: 1 / -1;">
-                        <p>🎉 ¡Sé el primero en dejar un comentario!</p>
-                        <p><small>Los comentarios aparecerán aquí después de ser aprobados.</small></p>
-                    </div>
-                `;
-                
             } catch (error) {
-                console.log('No se pudieron cargar comentarios reales, mostrando ejemplos');
-                // Si hay error, mostrar comentarios de ejemplo temporalmente
-                displaySampleComments();
+                console.log('Error cargando comentarios:', error);
+                showEmptyState();
             }
         }
         
@@ -417,12 +412,7 @@
             const commentsGrid = document.getElementById('commentsGrid');
             
             if (comments.length === 0) {
-                commentsGrid.innerHTML = `
-                    <div style="text-align: center; grid-column: 1 / -1;">
-                        <p>📝 Aún no hay comentarios aprobados.</p>
-                        <p><small>Los comentarios aparecerán aquí después de ser revisados.</small></p>
-                    </div>
-                `;
+                showEmptyState();
                 return;
             }
             
@@ -433,33 +423,32 @@
             commentsGrid.innerHTML = comments.map(comment => `
                 <div class="comment-card">
                     <div class="comment-header">
-                        <div class="comment-author">${comment.nombre || 'Anónimo'}</div>
+                        <div class="comment-author">${escapeHtml(comment.nombre || 'Anónimo')}</div>
                         <div class="comment-stars">${generateStars(comment.estrellas)}</div>
                     </div>
                     <div class="comment-date">${formatDate(comment.fecha)}</div>
-                    <div class="comment-text">${comment.comentario || ''}</div>
+                    <div class="comment-text">${escapeHtml(comment.comentario || '')}</div>
                 </div>
             `).join('');
         }
         
-        // Mostrar comentarios de ejemplo (temporal)
-        function displaySampleComments() {
-            const sampleComments = [
-                {
-                    nombre: "María G.",
-                    estrellas: 5,
-                    comentario: "Excelente servicio! La atención es personalizada y de muy alta calidad. Definitivamente volveré a contratar.",
-                    fecha: "2023-10-15"
-                },
-                {
-                    nombre: "Carlos R.",
-                    estrellas: 4,
-                    comentario: "Muy contento con el servicio. Rápido, profesional y con resultados que superaron mis expectativas.",
-                    fecha: "2023-10-10"
-                }
-            ];
-            
-            displayComments(sampleComments);
+        // Mostrar estado vacío
+        function showEmptyState() {
+            const commentsGrid = document.getElementById('commentsGrid');
+            commentsGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-comments" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                    <h3>¡Sé el primero en comentar!</h3>
+                    <p>Los comentarios aparecerán aquí después de ser aprobados.</p>
+                </div>
+            `;
+        }
+        
+        // Escapar HTML para seguridad
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
         
         // Generar estrellas según la calificación
@@ -567,15 +556,17 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    // Enviar usando FormData (evita CORS)
-                    const formData = new FormData();
-                    formData.append('nombre', name);
-                    formData.append('estrellas', rating);
-                    formData.append('comentario', comment);
-                    
+                    // Enviar usando JSON
                     const response = await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
-                        body: formData
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            nombre: name,
+                            estrellas: rating,
+                            comentario: comment
+                        })
                     });
                     
                     const result = await response.json();
@@ -590,11 +581,6 @@
                             star.style.color = '#444';
                         });
                         document.getElementById('rating').value = '0';
-                        
-                        // Recargar comentarios después de 3 segundos
-                        setTimeout(() => {
-                            loadComments();
-                        }, 3000);
                         
                     } else {
                         throw new Error(result.error);
