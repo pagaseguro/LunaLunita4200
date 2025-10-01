@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* MANTÉN TODO TU CSS ORIGINAL IGUAL */
         :root {
             --primary: #8a2be2;
             --secondary: #ff4d94;
@@ -382,17 +381,22 @@
             initializeCommentForm();
         });
         
-        // Cargar comentarios REALES desde Google Sheets
-        async function loadComments() {
+        // Cargar comentarios usando JSONP (evita CORS)
+        function loadComments() {
             const commentsGrid = document.getElementById('commentsGrid');
             
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getComments');
-                const realComments = await response.json();
+            // Crear script para JSONP
+            const callbackName = 'loadCommentsCallback_' + Date.now();
+            const script = document.createElement('script');
+            
+            window[callbackName] = function(comments) {
+                // Limpiar callback
+                delete window[callbackName];
+                document.body.removeChild(script);
                 
-                if (realComments && realComments.length > 0) {
+                if (comments && comments.length > 0) {
                     // Filtrar solo comentarios APROBADOS
-                    const comentariosAprobados = realComments.filter(comment => 
+                    const comentariosAprobados = comments.filter(comment => 
                         comment.estado && comment.estado.toString().toLowerCase() === 'aprobado'
                     );
                     
@@ -400,11 +404,52 @@
                 } else {
                     showEmptyState();
                 }
+            };
+            
+            script.src = GOOGLE_SCRIPT_URL + '?action=getComments&callback=' + callbackName;
+            document.body.appendChild(script);
+            
+            // Timeout por si falla
+            setTimeout(() => {
+                if (window[callbackName]) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    showEmptyState();
+                }
+            }, 10000);
+        }
+        
+        // Enviar comentario usando FormData (evita CORS)
+        function enviarComentario(datos) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'submitCommentCallback_' + Date.now();
+                const script = document.createElement('script');
                 
-            } catch (error) {
-                console.log('Error cargando comentarios:', error);
-                showEmptyState();
-            }
+                window[callbackName] = function(response) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    resolve(response);
+                };
+                
+                const params = new URLSearchParams();
+                params.append('callback', callbackName);
+                params.append('action', 'submitComment');
+                params.append('nombre', datos.nombre);
+                params.append('estrellas', datos.estrellas);
+                params.append('comentario', datos.comentario);
+                
+                script.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
+                document.body.appendChild(script);
+                
+                // Timeout
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        document.body.removeChild(script);
+                        reject(new Error('Timeout'));
+                    }
+                }, 10000);
+            });
         }
         
         // Mostrar comentarios en la página
@@ -556,20 +601,11 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    // Enviar usando JSON
-                    const response = await fetch(GOOGLE_SCRIPT_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            nombre: name,
-                            estrellas: rating,
-                            comentario: comment
-                        })
+                    const result = await enviarComentario({
+                        nombre: name,
+                        estrellas: rating,
+                        comentario: comment
                     });
-                    
-                    const result = await response.json();
                     
                     if (result.success) {
                         showNotification('¡Gracias por tu comentario! Será revisado antes de publicarse.', 'success');
