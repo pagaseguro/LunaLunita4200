@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* MANTÉN TODO TU CSS ORIGINAL IGUAL */
         :root {
             --primary: #8a2be2;
             --secondary: #ff4d94;
@@ -371,7 +372,6 @@
     </div>
 
     <script>
-        // URL ACTUALIZADA
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFIOR1UOYgZMC0YZDJyrLTB2ScPk8RbfviCYJueVe_zaiS6h2JQ8R7a5wH7XzjqpLh_w/exec';
 
         // Inicialización cuando el DOM está listo
@@ -381,25 +381,23 @@
             initializeCommentForm();
         });
         
-        // Cargar comentarios usando JSONP (evita CORS)
+        // Cargar comentarios - SOLO LECTURA
         function loadComments() {
             const commentsGrid = document.getElementById('commentsGrid');
             
-            // Crear script para JSONP
             const callbackName = 'loadCommentsCallback_' + Date.now();
             const script = document.createElement('script');
             
             window[callbackName] = function(comments) {
-                // Limpiar callback
                 delete window[callbackName];
-                document.body.removeChild(script);
+                if (document.body.contains(script)) {
+                    document.body.removeChild(script);
+                }
                 
-                if (comments && comments.length > 0) {
-                    // Filtrar solo comentarios APROBADOS
+                if (comments && Array.isArray(comments) && comments.length > 0) {
                     const comentariosAprobados = comments.filter(comment => 
                         comment.estado && comment.estado.toString().toLowerCase() === 'aprobado'
                     );
-                    
                     displayComments(comentariosAprobados);
                 } else {
                     showEmptyState();
@@ -407,19 +405,18 @@
             };
             
             script.src = GOOGLE_SCRIPT_URL + '?action=getComments&callback=' + callbackName;
-            document.body.appendChild(script);
-            
-            // Timeout por si falla
-            setTimeout(() => {
-                if (window[callbackName]) {
-                    delete window[callbackName];
+            script.onerror = function() {
+                delete window[callbackName];
+                if (document.body.contains(script)) {
                     document.body.removeChild(script);
-                    showEmptyState();
                 }
-            }, 10000);
+                showEmptyState();
+            };
+            
+            document.body.appendChild(script);
         }
         
-        // Enviar comentario usando FormData (evita CORS)
+        // Enviar comentario - SOLO ESCRITURA
         function enviarComentario(datos) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'submitCommentCallback_' + Date.now();
@@ -427,8 +424,18 @@
                 
                 window[callbackName] = function(response) {
                     delete window[callbackName];
-                    document.body.removeChild(script);
+                    if (document.body.contains(script)) {
+                        document.body.removeChild(script);
+                    }
                     resolve(response);
+                };
+                
+                script.onerror = function() {
+                    delete window[callbackName];
+                    if (document.body.contains(script)) {
+                        document.body.removeChild(script);
+                    }
+                    reject(new Error('Error de conexión'));
                 };
                 
                 const params = new URLSearchParams();
@@ -440,19 +447,10 @@
                 
                 script.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
                 document.body.appendChild(script);
-                
-                // Timeout
-                setTimeout(() => {
-                    if (window[callbackName]) {
-                        delete window[callbackName];
-                        document.body.removeChild(script);
-                        reject(new Error('Timeout'));
-                    }
-                }, 10000);
             });
         }
         
-        // Mostrar comentarios en la página
+        // Resto de funciones se mantienen igual...
         function displayComments(comments) {
             const commentsGrid = document.getElementById('commentsGrid');
             
@@ -461,10 +459,8 @@
                 return;
             }
             
-            // Ordenar comentarios por fecha (más recientes primero)
             comments.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
             
-            // Generar HTML para cada comentario
             commentsGrid.innerHTML = comments.map(comment => `
                 <div class="comment-card">
                     <div class="comment-header">
@@ -477,7 +473,6 @@
             `).join('');
         }
         
-        // Mostrar estado vacío
         function showEmptyState() {
             const commentsGrid = document.getElementById('commentsGrid');
             commentsGrid.innerHTML = `
@@ -489,32 +484,23 @@
             `;
         }
         
-        // Escapar HTML para seguridad
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
         
-        // Generar estrellas según la calificación
         function generateStars(rating) {
             if (!rating) return '☆☆☆☆☆';
-            
             let stars = '';
             for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    stars += '★';
-                } else {
-                    stars += '☆';
-                }
+                stars += i <= rating ? '★' : '☆';
             }
             return stars;
         }
         
-        // Formatear fecha
         function formatDate(dateString) {
             if (!dateString) return 'Fecha no disponible';
-            
             try {
                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
                 return new Date(dateString).toLocaleDateString('es-ES', options);
@@ -523,7 +509,6 @@
             }
         }
         
-        // Inicializar sistema de calificación con estrellas
         function initializeStarRating() {
             const stars = document.querySelectorAll('.star');
             const ratingInput = document.getElementById('rating');
@@ -532,46 +517,30 @@
                 star.addEventListener('click', function() {
                     const rating = parseInt(this.getAttribute('data-rating'));
                     ratingInput.value = rating;
-                    
-                    // Actualizar visualización de estrellas
                     stars.forEach(s => {
-                        if (parseInt(s.getAttribute('data-rating')) <= rating) {
-                            s.classList.add('active');
-                        } else {
-                            s.classList.remove('active');
-                        }
+                        const sRating = parseInt(s.getAttribute('data-rating'));
+                        s.classList.toggle('active', sRating <= rating);
                     });
                 });
                 
-                // Efecto hover
                 star.addEventListener('mouseover', function() {
                     const rating = parseInt(this.getAttribute('data-rating'));
-                    
                     stars.forEach(s => {
-                        if (parseInt(s.getAttribute('data-rating')) <= rating) {
-                            s.style.color = 'gold';
-                        } else {
-                            s.style.color = '#444';
-                        }
+                        const sRating = parseInt(s.getAttribute('data-rating'));
+                        s.style.color = sRating <= rating ? 'gold' : '#444';
                     });
                 });
                 
-                // Restaurar al quitar el mouse
                 star.addEventListener('mouseout', function() {
                     const currentRating = parseInt(ratingInput.value);
-                    
                     stars.forEach(s => {
-                        if (parseInt(s.getAttribute('data-rating')) <= currentRating) {
-                            s.style.color = 'gold';
-                        } else {
-                            s.style.color = '#444';
-                        }
+                        const sRating = parseInt(s.getAttribute('data-rating'));
+                        s.style.color = sRating <= currentRating ? 'gold' : '#444';
                     });
                 });
             });
         }
         
-        // Inicializar formulario de comentarios
         function initializeCommentForm() {
             const form = document.getElementById('commentForm');
             const notification = document.getElementById('formNotification');
@@ -583,7 +552,6 @@
                 const rating = parseInt(document.getElementById('rating').value);
                 const comment = document.getElementById('comment').value.trim();
                 
-                // Validaciones
                 if (!name || !rating || !comment) {
                     showNotification('Por favor, completa todos los campos', 'error');
                     return;
@@ -594,7 +562,6 @@
                     return;
                 }
                 
-                // Mostrar carga
                 const submitBtn = form.querySelector('.submit-btn');
                 const originalText = submitBtn.textContent;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
@@ -609,38 +576,30 @@
                     
                     if (result.success) {
                         showNotification('¡Gracias por tu comentario! Será revisado antes de publicarse.', 'success');
-                        
-                        // Limpiar formulario
                         form.reset();
                         document.querySelectorAll('.star').forEach(star => {
                             star.classList.remove('active');
                             star.style.color = '#444';
                         });
                         document.getElementById('rating').value = '0';
-                        
                     } else {
                         throw new Error(result.error);
                     }
                     
                 } catch (error) {
-                    console.error('Error:', error);
                     showNotification('Error al enviar el comentario. Por favor, intenta nuevamente.', 'error');
                 } finally {
-                    // Restaurar botón
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
                 }
             });
         }
         
-        // Mostrar notificación
         function showNotification(message, type) {
             const notification = document.getElementById('formNotification');
             notification.textContent = message;
             notification.className = `notification ${type}`;
             notification.style.display = 'block';
-            
-            // Ocultar después de 5 segundos
             setTimeout(() => {
                 notification.style.display = 'none';
             }, 5000);
