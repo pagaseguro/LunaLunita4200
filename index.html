@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LunaLunita | PAGO SEGURO</title>
+    
+    <!-- Google Analytics - CON TU ID REAL -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BTSRKVY9SX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-BTSRKVY9SX');
+    </script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://www.paypal.com/sdk/js?client-id=AWJ6ZogbS9LFLcqoanrJZ2IFLPAU8y6pYS5mZ_AseX-f3N_pSArToddcIQll01fbR1MfycLA_X0sNM-n&currency=USD"></script>
@@ -1258,6 +1268,7 @@
         let selectedService = null;
         let uniqueCode = '';
         let paymentDetails = {};
+        let paymentStarted = false;
         
         // Datos de redes sociales
         const socialNetworks = {
@@ -1318,6 +1329,114 @@
                 link: "https://jhamiley.com/tuperfil"
             }
         };
+
+        // ============================================
+        // GOOGLE ANALYTICS - EVENTOS PERSONALIZADOS
+        // ============================================
+
+        // Función para trackear eventos (compatible con tu código)
+        function trackGAEvent(eventName, parameters) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, parameters);
+            }
+            console.log(`📊 GA Event: ${eventName}`, parameters);
+        }
+
+        // Trackear visualización de página
+        trackGAEvent('page_view', {
+            page_title: 'LunaLunita - Pago Seguro',
+            page_location: window.location.href
+        });
+
+        // Trackear dispositivo y ubicación
+        function trackDeviceAndLocation() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            trackGAEvent('device_info', {
+                device_type: isMobile ? 'mobile' : 'desktop',
+                screen_resolution: `${screen.width}x${screen.height}`,
+                language: navigator.language
+            });
+        }
+
+        // ============================================
+        // ANALYTICS LOCALES - DATOS GRATUITOS
+        // ============================================
+
+        // Contador de visitas diarias
+        let dailyVisits = parseInt(localStorage.getItem('dailyVisits')) || 0;
+        dailyVisits++;
+        localStorage.setItem('dailyVisits', dailyVisits);
+
+        // Reiniciar contador diario a medianoche
+        function resetDailyCounter() {
+            const now = new Date();
+            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            const timeUntilMidnight = tomorrow - now;
+            
+            setTimeout(() => {
+                localStorage.setItem('dailyVisits', '0');
+                resetDailyCounter();
+            }, timeUntilMidnight);
+        }
+        resetDailyCounter();
+
+        // Trackear clics en servicios
+        function trackServiceClick(serviceName) {
+            let serviceClicks = JSON.parse(localStorage.getItem('serviceClicks')) || {};
+            serviceClicks[serviceName] = (serviceClicks[serviceName] || 0) + 1;
+            localStorage.setItem('serviceClicks', JSON.stringify(serviceClicks));
+            
+            console.log(`Clic en servicio: ${serviceName} - Total: ${serviceClicks[serviceName]}`);
+        }
+
+        // Trackear pagos exitosos
+        function trackSuccessfulPayment(service, amount) {
+            let successfulPayments = JSON.parse(localStorage.getItem('successfulPayments')) || [];
+            successfulPayments.push({
+                service: service,
+                amount: amount,
+                timestamp: new Date().toISOString(),
+                date: new Date().toLocaleDateString()
+            });
+            localStorage.setItem('successfulPayments', JSON.stringify(successfulPayments));
+            
+            console.log(`Pago exitoso: ${service} - ${amount}`);
+        }
+
+        // Trackear inicio de pago
+        function trackPaymentStart() {
+            let paymentStarts = parseInt(localStorage.getItem('paymentStarts')) || 0;
+            paymentStarts++;
+            localStorage.setItem('paymentStarts', paymentStarts);
+            
+            const startTime = new Date().toISOString();
+            localStorage.setItem('lastPaymentStart', startTime);
+        }
+
+        // Trackear abandonos de pago
+        function trackPaymentAbandonment() {
+            let abandonedPayments = parseInt(localStorage.getItem('abandonedPayments')) || 0;
+            abandonedPayments++;
+            localStorage.setItem('abandonedPayments', abandonedPayments);
+            
+            console.log('⚠️ Pago abandonado detectado');
+        }
+
+        // Trackear errores de pago
+        function trackPaymentError(error) {
+            let paymentErrors = JSON.parse(localStorage.getItem('paymentErrors')) || [];
+            paymentErrors.push({
+                error: error.message || 'Error desconocido',
+                timestamp: new Date().toISOString(),
+                service: selectedService ? selectedService.getAttribute('data-service') : 'No seleccionado'
+            });
+            localStorage.setItem('paymentErrors', JSON.stringify(paymentErrors));
+        }
+
+        // ============================================
+        // FUNCIONES PRINCIPALES (ORIGINALES MODIFICADAS)
+        // ============================================
         
         // Función mejorada para enviar notificación a Telegram
         async function sendTelegramNotification(paymentData) {
@@ -1413,6 +1532,20 @@
                     return false;
                 }
                 
+                paymentStarted = true;
+                trackPaymentStart();
+                
+                // Google Analytics - Inicio de checkout
+                trackGAEvent('begin_checkout', {
+                    currency: 'USD',
+                    value: selectedService.getAttribute('data-price'),
+                    items: [{
+                        item_name: selectedService.getAttribute('data-service'),
+                        price: selectedService.getAttribute('data-price'),
+                        quantity: 1
+                    }]
+                });
+                
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
@@ -1437,8 +1570,26 @@
                         code: uniqueCode
                     };
                     
+                    // Google Analytics - Conversión
+                    const transactionId = data.orderID;
+                    const revenue = selectedService.getAttribute('data-price');
+                    
+                    trackGAEvent('purchase', {
+                        transaction_id: transactionId,
+                        value: revenue,
+                        currency: 'USD',
+                        items: [{
+                            item_name: selectedService.getAttribute('data-service'),
+                            price: revenue,
+                            quantity: 1
+                        }]
+                    });
+                    
                     // Enviar notificación a Telegram
                     sendTelegramNotification(paymentData);
+                    
+                    // Trackear pago exitoso localmente
+                    trackSuccessfulPayment(paymentData.service, paymentData.amount);
                     
                     // Crear corazones de celebración
                     createHearts(30);
@@ -1447,6 +1598,9 @@
             onError: function(err) {
                 console.error('Error en el pago:', err);
                 showNotification('error', 'Error en el pago', 'Ocurrió un error durante el proceso de pago. Por favor, intenta de nuevo.');
+                
+                // Trackear error de pago
+                trackPaymentError(err);
             }
         }).render('#paypal-button-container');
         
@@ -1556,6 +1710,12 @@
             const message = encodeURIComponent(`¡Hola Lunita! He realizado un pago. Mi código único es: ${uniqueCode}. Te envío la captura en un momento.`);
             window.open(`https://t.me/lunalunita4200?text=${message}`, '_blank');
             
+            // Google Analytics - Clic en Telegram
+            trackGAEvent('telegram_contact', {
+                method: 'post_payment',
+                code: uniqueCode
+            });
+            
             // Actualizar mensaje de estado
             document.getElementById('statusMessage').innerHTML = '<div style="color: var(--success);"><i class="fas fa-check-circle"></i> ¡Redireccionando a Telegram! Por favor envía la captura.</div>';
             
@@ -1567,7 +1727,7 @@
         function generateUniqueCode() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let code = '';
-            for (let i = 0; i < 4; i++) { // Cambiado de 8 a 4 caracteres
+            for (let i = 0; i < 4; i++) {
                 code += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             uniqueCode = code;
@@ -1615,6 +1775,19 @@
             // Seleccionar nuevo servicio
             element.classList.add('selected');
             selectedService = element;
+            
+            // Google Analytics - Selección de servicio
+            const serviceName = element.getAttribute('data-service');
+            const servicePrice = element.getAttribute('data-price');
+            
+            trackGAEvent('select_service', {
+                service_name: serviceName,
+                service_price: servicePrice,
+                currency: 'USD'
+            });
+            
+            // Trackear clic localmente
+            trackServiceClick(serviceName);
             
             // Crear confeti
             createConfetti();
@@ -1689,6 +1862,12 @@
             
             document.getElementById('socialPreview').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
+            
+            // Google Analytics - Clic en red social
+            trackGAEvent('social_click', {
+                social_network: data.title,
+                link_url: data.link
+            });
         }
         
         // Función para cerrar vista previa
@@ -1704,6 +1883,128 @@
             });
             this.style.display = 'none';
         });
+
+        // Detectar cuando el usuario abandona la página durante el pago
+        window.addEventListener('beforeunload', function(e) {
+            if (paymentStarted) {
+                trackPaymentAbandonment();
+                
+                // Google Analytics - Abandono
+                trackGAEvent('payment_abandoned', {
+                    service: selectedService ? selectedService.getAttribute('data-service') : 'No seleccionado'
+                });
+            }
+        });
+
+        // ============================================
+        // REPORTES Y PANEL DE CONTROL
+        // ============================================
+
+        // Función para generar reportes
+        function generateDailyReport() {
+            const visits = parseInt(localStorage.getItem('dailyVisits')) || 0;
+            const serviceClicks = JSON.parse(localStorage.getItem('serviceClicks')) || {};
+            const successfulPayments = JSON.parse(localStorage.getItem('successfulPayments')) || [];
+            const abandonedPayments = parseInt(localStorage.getItem('abandonedPayments')) || 0;
+            const paymentStarts = parseInt(localStorage.getItem('paymentStarts')) || 0;
+            const deviceStats = JSON.parse(localStorage.getItem('deviceStats')) || { mobile: 0, desktop: 0 };
+            
+            const conversionRate = paymentStarts > 0 ? (successfulPayments.length / paymentStarts * 100).toFixed(2) : 0;
+            const abandonmentRate = paymentStarts > 0 ? (abandonedPayments / paymentStarts * 100).toFixed(2) : 0;
+            
+            const report = {
+                date: new Date().toLocaleDateString(),
+                visits: visits,
+                serviceClicks: serviceClicks,
+                successfulPayments: successfulPayments.length,
+                totalRevenue: successfulPayments.reduce((sum, payment) => {
+                    const amount = parseFloat(payment.amount.replace('$', ''));
+                    return sum + (isNaN(amount) ? 0 : amount);
+                }, 0),
+                abandonedPayments: abandonedPayments,
+                paymentStarts: paymentStarts,
+                conversionRate: conversionRate + '%',
+                abandonmentRate: abandonmentRate + '%',
+                deviceStats: deviceStats,
+                mostPopularService: Object.keys(serviceClicks).reduce((a, b) => serviceClicks[a] > serviceClicks[b] ? a : b, 'Ninguno')
+            };
+            
+            return report;
+        }
+
+        // Panel de control simple (solo en consola)
+        function showAnalyticsDashboard() {
+            const report = generateDailyReport();
+            
+            console.log('📊 === REPORTE DIARIO LUNA LUNITA ===');
+            console.log(`📅 Fecha: ${report.date}`);
+            console.log(`👥 Visitas hoy: ${report.visits}`);
+            console.log(`📱 Dispositivos: Móvil ${report.deviceStats.mobile} | Desktop ${report.deviceStats.desktop}`);
+            console.log(`🛍️ Clics en servicios:`);
+            Object.keys(report.serviceClicks).forEach(service => {
+                console.log(`   - ${service}: ${report.serviceClicks[service]} clics`);
+            });
+            console.log(`💰 Ventas exitosas: ${report.successfulPayments}`);
+            console.log(`💵 Ingreso total: $${report.totalRevenue}`);
+            console.log(`❌ Pagos abandonados: ${report.abandonedPayments}`);
+            console.log(`🎯 Tasa de conversión: ${report.conversionRate}`);
+            console.log(`🚪 Tasa de abandono: ${report.abandonmentRate}`);
+            console.log(`🔥 Servicio más popular: ${report.mostPopularService}`);
+            console.log('====================================');
+        }
+
+        // Exportar datos para Excel/Google Sheets
+        function exportToCSV() {
+            const report = generateDailyReport();
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // Encabezados
+            csvContent += "Fecha,Visitas,Ventas Exitosas,Ingreso Total,Pagos Abandonados,Tasa Conversión,Servicio Más Popular\n";
+            
+            // Datos
+            csvContent += `${report.date},${report.visits},${report.successfulPayments},${report.totalRevenue},${report.abandonedPayments},${report.conversionRate},${report.mostPopularService}\n`;
+            
+            // Crear enlace de descarga
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `reporte_lunalunita_${report.date.replace(/\//g, '-')}.csv`);
+            document.body.appendChild(link);
+            
+            link.click();
+            document.body.removeChild(link);
+            
+            // Google Analytics - Exportación de datos
+            trackGAEvent('data_export', {
+                format: 'csv',
+                report_type: 'daily_summary'
+            });
+        }
+
+        // Añadir botón de exportación discreto
+        function addExportButton() {
+            const exportBtn = document.createElement('button');
+            exportBtn.textContent = '📊 Exportar Datos';
+            exportBtn.style.position = 'fixed';
+            exportBtn.style.bottom = '10px';
+            exportBtn.style.right = '10px';
+            exportBtn.style.zIndex = '10000';
+            exportBtn.style.padding = '5px 10px';
+            exportBtn.style.fontSize = '12px';
+            exportBtn.style.background = 'var(--primary)';
+            exportBtn.style.color = 'white';
+            exportBtn.style.border = 'none';
+            exportBtn.style.borderRadius = '5px';
+            exportBtn.style.cursor = 'pointer';
+            exportBtn.style.opacity = '0.7';
+            
+            exportBtn.addEventListener('click', exportToCSV);
+            document.body.appendChild(exportBtn);
+        }
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
         
         // Animación de título
         const titleText = "✨TU ACCESO A MI MUNDO PRIVADO✨ Contenido ardiente, donde tú eres el protagonista ✨";
@@ -1735,11 +2036,21 @@
         // Iniciar animaciones cuando la página cargue
         window.onload = function() {
             typeTitle();
+            trackDeviceAndLocation();
             
             // Iniciar animación de corazones
             setInterval(() => {
                 createHearts(3);
             }, 3000);
+            
+            // Añadir botón de exportación después de 2 segundos
+            setTimeout(addExportButton, 2000);
+            
+            // Mostrar reporte en consola después de 3 segundos
+            setTimeout(showAnalyticsDashboard, 3000);
+            
+            // Ejecutar reporte cada hora automáticamente
+            setInterval(showAnalyticsDashboard, 60 * 60 * 1000);
         };
     </script>
 </body>
