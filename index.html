@@ -1981,26 +1981,7 @@
             });
         }
 
-        // Añadir botón de exportación discreto
-        function addExportButton() {
-            const exportBtn = document.createElement('button');
-            exportBtn.textContent = '📊 Exportar Datos';
-            exportBtn.style.position = 'fixed';
-            exportBtn.style.bottom = '10px';
-            exportBtn.style.right = '10px';
-            exportBtn.style.zIndex = '10000';
-            exportBtn.style.padding = '5px 10px';
-            exportBtn.style.fontSize = '12px';
-            exportBtn.style.background = 'var(--primary)';
-            exportBtn.style.color = 'white';
-            exportBtn.style.border = 'none';
-            exportBtn.style.borderRadius = '5px';
-            exportBtn.style.cursor = 'pointer';
-            exportBtn.style.opacity = '0.7';
-            
-            exportBtn.addEventListener('click', exportToCSV);
-            document.body.appendChild(exportBtn);
-        }
+        
 
         // ============================================
         // INICIALIZACIÓN
@@ -2043,9 +2024,7 @@
                 createHearts(3);
             }, 3000);
             
-            // Añadir botón de exportación después de 2 segundos
-            setTimeout(addExportButton, 2000);
-            
+                        
             // Mostrar reporte en consola después de 3 segundos
             setTimeout(showAnalyticsDashboard, 3000);
             
@@ -2055,4 +2034,3 @@
     </script>
 </body>
 </html>
-
