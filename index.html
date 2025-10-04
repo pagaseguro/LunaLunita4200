@@ -509,6 +509,43 @@
             body {
                 padding: 10px;
             }
+
+/* Agrega esto en la sección de móviles */
+.screenshot-modal {
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    padding: 20px 15px !important;
+}
+
+.screenshot-modal h3 {
+    font-size: 1.3rem !important;
+}
+
+.screenshot-modal p {
+    font-size: 0.9rem !important;
+    margin-bottom: 12px !important;
+}
+
+.payment-details {
+    padding: 10px !important;
+    margin: 15px 0 !important;
+}
+
+.payment-details div {
+    font-size: 0.85rem !important;
+    margin-bottom: 8px !important;
+}
+
+.unique-code {
+    font-size: 1rem !important;
+    padding: 8px !important;
+    margin: 12px 0 !important;
+}
+
+.screenshot-btn {
+    padding: 10px 15px !important;
+    font-size: 0.9rem !important;
+}        
             
             .container {
                 margin: 10px 0;
@@ -1876,13 +1913,6 @@
             document.getElementById('overlay').style.display = 'none';
         }
         
-        // Cerrar modales al hacer clic en el overlay
-        document.getElementById('overlay').addEventListener('click', function() {
-            document.querySelectorAll('.modal, .social-preview, .screenshot-modal').forEach(modal => {
-                modal.style.display = 'none';
-            });
-            this.style.display = 'none';
-        });
 
         // Detectar cuando el usuario abandona la página durante el pago
         window.addEventListener('beforeunload', function(e) {
@@ -2034,3 +2064,4 @@
     </script>
 </body>
 </html>
+
