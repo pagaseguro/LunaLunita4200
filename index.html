@@ -1075,12 +1075,13 @@
             color: var(--accent);
         }
 
-/* SECCIÓN TESTIMONIOS */
+/* SECCIÓN TESTIMONIOS CON CARRUSEL */
 .testimonials-section {
     padding: 40px 30px;
     background: rgba(30, 10, 60, 0.7);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
 }
 
 .testimonials-title {
@@ -1094,23 +1095,43 @@
     font-weight: 700;
 }
 
-.testimonials-grid {
+.testimonials-carousel {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.testimonials-track {
+    display: flex;
     gap: 20px;
-    margin-bottom: 30px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 10px 0;
+    width: 100%;
+    max-width: 900px;
+}
+
+.testimonials-track::-webkit-scrollbar {
+    display: none;
 }
 
 .testimonial-card {
+    flex: 0 0 280px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     padding: 25px;
-    width: 100%;
-    max-width: 300px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .testimonial-card:hover {
@@ -1124,6 +1145,7 @@
     margin-bottom: 15px;
     line-height: 1.5;
     color: rgba(255, 255, 255, 0.9);
+    flex-grow: 1;
 }
 
 .testimonial-author {
@@ -1131,6 +1153,48 @@
     color: #ff4d94;
     text-align: right;
     font-size: 0.9rem;
+}
+
+.carousel-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.carousel-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+.carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+    background: #ff4d94;
+    transform: scale(1.2);
 }
 
 .testimonials-cta {
@@ -1168,8 +1232,15 @@
     }
     
     .testimonial-card {
+        flex: 0 0 250px;
         padding: 20px;
-        max-width: 100%;
+        min-height: 160px;
+    }
+    
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1.3rem;
     }
 }
 
@@ -1182,9 +1253,21 @@
         font-size: 1.3rem;
     }
     
+    .testimonial-card {
+        flex: 0 0 220px;
+        padding: 15px;
+        min-height: 140px;
+    }
+    
     .testimonials-btn {
         padding: 12px 25px;
         font-size: 0.9rem;
+    }
+    
+    .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 1.1rem;
     }
 }
 
@@ -1351,30 +1434,52 @@
             </div>
         </div>
 
-<!-- SECCIÓN DE TESTIMONIOS -->
+<!-- SECCIÓN DE TESTIMONIOS CON CARRUSEL -->
 <div class="testimonials-section">
     <h2 class="testimonials-title">💋 Lo que dicen mis admiradores...</h2>
-    <div class="testimonials-grid">
-        <div class="testimonial-card">
-            <div class="testimonial-text">"Lunita me volvió adicto... cada contenido vale cada dólar 💦"</div>
-            <div class="testimonial-author">- Carlos, 28 años</div>
+    
+    <div class="testimonials-carousel">
+        <button class="carousel-btn carousel-prev">‹</button>
+        
+        <div class="testimonials-track">
+            <div class="testimonial-card">
+                <div class="testimonial-text">"Lunita me volvió adicto... cada contenido vale cada dólar 💦"</div>
+                <div class="testimonial-author">- Carlos, 28 años</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">"La videollamada fue tan intensa que no pude contenerme... 🔥"</div>
+                <div class="testimonial-author">- Alejandro, 32 años</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">"No creí que por $25 tendría acceso a TANTO contenido picante 😈"</div>
+                <div class="testimonial-author">- Miguel, 26 años</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">"Su canal VIP es mi mejor inversión cada mes... siempre sube cosas nuevas 🎯"</div>
+                <div class="testimonial-author">- Roberto, 30 años</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">"Después de su videollamada, supe que no podría conformarme con menos 💋"</div>
+                <div class="testimonial-author">- David, 27 años</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">"Esa chica sabe exactamente cómo calentarme... cada mensaje es fuego puro 🔥"</div>
+                <div class="testimonial-author">- Javier, 29 años</div>
+            </div>
         </div>
-        <div class="testimonial-card">
-            <div class="testimonial-text">"La videollamada fue tan intensa que no pude contenerme... 🔥"</div>
-            <div class="testimonial-author">- Alejandro, 32 años</div>
-        </div>
-        <div class="testimonial-card">
-            <div class="testimonial-text">"No creí que por $25 tendría acceso a TANTO contenido picante 😈"</div>
-            <div class="testimonial-author">- Miguel, 26 años</div>
-        </div>
+        
+        <button class="carousel-btn carousel-next">›</button>
     </div>
+    
+    <div class="carousel-dots"></div>
+    
     <div class="testimonials-cta">
         <a href="comentarios.html" class="testimonials-btn">
             📢 Ver más experiencias reales
             <i class="fas fa-arrow-right"></i>
         </a>
     </div>
-</div>       
+</div>     
 
         <div class="payment-section" id="payment-section">
             <h2 class="form-title">Complete su información de pago</h2>
@@ -2184,6 +2289,80 @@
         }
         
         // Iniciar animaciones cuando la página cargue
+// CARRUSEL DE TESTIMONIOS
+function initTestimonialsCarousel() {
+    const track = document.querySelector('.testimonials-track');
+    const cards = document.querySelectorAll('.testimonial-card');
+    const dotsContainer = document.querySelector('.carousel-dots');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    
+    if (!track || !cards.length) return;
+    
+    const cardWidth = cards[0].offsetWidth + 20; // + gap
+    let currentIndex = 0;
+    
+    // Crear puntos indicadores
+    cards.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+    
+    const dots = document.querySelectorAll('.carousel-dot');
+    
+    function goToSlide(index) {
+        currentIndex = index;
+        track.scrollTo({
+            left: index * cardWidth,
+            behavior: 'smooth'
+        });
+        updateDots();
+    }
+    
+    function updateDots() {
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
+    
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % cards.length;
+        goToSlide(currentIndex);
+    }
+    
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+        goToSlide(currentIndex);
+    }
+    
+    // Event listeners
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    
+    // Auto-play cada 5 segundos
+    let autoPlay = setInterval(nextSlide, 5000);
+    
+    // Pausar auto-play al interactuar
+    track.addEventListener('mouseenter', () => clearInterval(autoPlay));
+    track.addEventListener('mouseleave', () => {
+        autoPlay = setInterval(nextSlide, 5000);
+    });
+    
+    // Actualizar índice al hacer scroll manual
+    track.addEventListener('scroll', () => {
+        const newIndex = Math.round(track.scrollLeft / cardWidth);
+        if (newIndex !== currentIndex) {
+            currentIndex = newIndex;
+            updateDots();
+        }
+    });
+}
+
+// Inicializar cuando cargue la página
+window.addEventListener('load', initTestimonialsCarousel);
+
         window.onload = function() {
             typeTitle();
             trackDeviceAndLocation();
