@@ -1074,6 +1074,120 @@
             border: 1px solid var(--accent);
             color: var(--accent);
         }
+
+/* SECCIÓN TESTIMONIOS */
+.testimonials-section {
+    padding: 40px 30px;
+    background: rgba(30, 10, 60, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.testimonials-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    background: linear-gradient(90deg, #ff4d94, #8a2be2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+.testimonials-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.testimonial-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    border-color: #ff4d94;
+    box-shadow: 0 10px 25px rgba(255, 77, 148, 0.3);
+}
+
+.testimonial-text {
+    font-style: italic;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.testimonial-author {
+    font-weight: 600;
+    color: #ff4d94;
+    text-align: right;
+    font-size: 0.9rem;
+}
+
+.testimonials-cta {
+    text-align: center;
+}
+
+.testimonials-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(90deg, #ff4d94, #8a2be2);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.testimonials-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 77, 148, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .testimonials-section {
+        padding: 30px 20px;
+    }
+    
+    .testimonials-title {
+        font-size: 1.5rem;
+    }
+    
+    .testimonial-card {
+        padding: 20px;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .testimonials-section {
+        padding: 25px 15px;
+    }
+    
+    .testimonials-title {
+        font-size: 1.3rem;
+    }
+    
+    .testimonials-btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -1236,7 +1350,32 @@
                 </a>
             </div>
         </div>
-        
+
+<!-- SECCIÓN DE TESTIMONIOS -->
+<div class="testimonials-section">
+    <h2 class="testimonials-title">💋 Lo que dicen mis admiradores...</h2>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="testimonial-text">"Lunita me volvió adicto... cada contenido vale cada dólar 💦"</div>
+            <div class="testimonial-author">- Carlos, 28 años</div>
+        </div>
+        <div class="testimonial-card">
+            <div class="testimonial-text">"La videollamada fue tan intensa que no pude contenerme... 🔥"</div>
+            <div class="testimonial-author">- Alejandro, 32 años</div>
+        </div>
+        <div class="testimonial-card">
+            <div class="testimonial-text">"No creí que por $25 tendría acceso a TANTO contenido picante 😈"</div>
+            <div class="testimonial-author">- Miguel, 26 años</div>
+        </div>
+    </div>
+    <div class="testimonials-cta">
+        <a href="comentarios.html" class="testimonials-btn">
+            📢 Ver más experiencias reales
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</div>       
+
         <div class="payment-section" id="payment-section">
             <h2 class="form-title">Complete su información de pago</h2>
             
